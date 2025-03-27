@@ -16,6 +16,7 @@ import {
     ResponsiveContainer,
     Cell,
 } from "recharts";
+import CBAM_CODES from "assets/commodity-codes.json";
 // import { Plus, Trash, AlertCircle, Info } from "lucide-react";
 
 export const CBAMCalculator = () => {
@@ -29,240 +30,9 @@ export const CBAMCalculator = () => {
     ];
 
     // CBAM commodity codes by category
-    const CBAM_CODES = {
-        iron_steel: [
-            {
-                code: "2601 12 00",
-                description: "Agglomerated iron ores and concentrates",
-            },
-            // Chapter 72 - Iron and steel (with exceptions noted in the official list)
-            { code: "7201", description: "Pig iron and spiegeleisen" },
-            {
-                code: "7203",
-                description:
-                    "Ferrous products from direct reduction of iron ore",
-            },
-            { code: "7205", description: "Granules and powders of pig iron" },
-            {
-                code: "7206",
-                description:
-                    "Iron and non-alloy steel in ingots or other primary forms",
-            },
-            {
-                code: "7207",
-                description:
-                    "Semi-finished products of iron or non-alloy steel",
-            },
-            {
-                code: "7208",
-                description:
-                    "Flat-rolled products of iron or non-alloy steel, hot-rolled",
-            },
-            {
-                code: "7209",
-                description:
-                    "Flat-rolled products of iron or non-alloy steel, cold-rolled",
-            },
-            {
-                code: "7210",
-                description:
-                    "Flat-rolled products of iron or non-alloy steel, clad, plated or coated",
-            },
-            {
-                code: "7211",
-                description:
-                    "Flat-rolled products of iron or non-alloy steel, width < 600mm",
-            },
-            {
-                code: "7212",
-                description:
-                    "Flat-rolled products of iron or non-alloy steel, clad, plated or coated, width < 600mm",
-            },
-            {
-                code: "7213",
-                description:
-                    "Bars and rods, hot-rolled, of iron or non-alloy steel",
-            },
-            {
-                code: "7214",
-                description: "Other bars and rods of iron or non-alloy steel",
-            },
-            {
-                code: "7215",
-                description: "Other bars and rods of iron or non-alloy steel",
-            },
-            {
-                code: "7216",
-                description:
-                    "Angles, shapes and sections of iron or non-alloy steel",
-            },
-            { code: "7217", description: "Wire of iron or non-alloy steel" },
-            {
-                code: "7218",
-                description: "Stainless steel in ingots or other primary forms",
-            },
-            {
-                code: "7219",
-                description:
-                    "Flat-rolled products of stainless steel, width ≥ 600mm",
-            },
-            {
-                code: "7220",
-                description:
-                    "Flat-rolled products of stainless steel, width < 600mm",
-            },
-            {
-                code: "7221",
-                description: "Bars and rods, hot-rolled, of stainless steel",
-            },
-            {
-                code: "7222",
-                description: "Other bars and rods of stainless steel",
-            },
-            { code: "7223", description: "Wire of stainless steel" },
-            {
-                code: "7224",
-                description:
-                    "Other alloy steel in ingots or other primary forms",
-            },
-            {
-                code: "7225",
-                description:
-                    "Flat-rolled products of other alloy steel, width ≥ 600mm",
-            },
-            {
-                code: "7226",
-                description:
-                    "Flat-rolled products of other alloy steel, width < 600mm",
-            },
-            {
-                code: "7227",
-                description: "Bars and rods, hot-rolled, of other alloy steel",
-            },
-            {
-                code: "7228",
-                description: "Other bars and rods of other alloy steel",
-            },
-            { code: "7229", description: "Wire of other alloy steel" },
-            // Additional iron/steel products
-            { code: "7301", description: "Sheet piling of iron or steel" },
-            {
-                code: "7302",
-                description:
-                    "Railway or tramway track construction material of iron or steel",
-            },
-            {
-                code: "7303",
-                description: "Tubes, pipes and hollow profiles, of cast iron",
-            },
-            {
-                code: "7304",
-                description:
-                    "Tubes, pipes and hollow profiles, seamless, of iron or steel",
-            },
-            {
-                code: "7305",
-                description:
-                    "Other tubes and pipes, external diameter exceeding 406.4 mm",
-            },
-            {
-                code: "7306",
-                description: "Other tubes, pipes and hollow profiles",
-            },
-            { code: "7307", description: "Tube or pipe fittings" },
-            { code: "7308", description: "Structures and parts of structures" },
-            {
-                code: "7309",
-                description:
-                    "Reservoirs, tanks, vats and similar containers exceeding 300 l",
-            },
-            {
-                code: "7310",
-                description:
-                    "Tanks, casks, drums, cans, boxes and similar containers not exceeding 300 l",
-            },
-            {
-                code: "7311",
-                description: "Containers for compressed or liquefied gas",
-            },
-            {
-                code: "7318",
-                description:
-                    "Screws, bolts, nuts, coach screws, screw hooks, rivets, cotters, cotter pins, washers",
-            },
-            { code: "7326", description: "Other articles of iron or steel" },
-        ],
-        aluminium: [
-            { code: "7601", description: "Unwrought aluminium" },
-            { code: "7603", description: "Aluminium powders and flakes" },
-            { code: "7604", description: "Aluminium bars, rods and profiles" },
-            { code: "7605", description: "Aluminium wire" },
-            {
-                code: "7606",
-                description:
-                    "Aluminium plates, sheets and strip, thickness > 0.2 mm",
-            },
-            { code: "7607", description: "Aluminium foil, thickness ≤ 0.2 mm" },
-            { code: "7608", description: "Aluminium tubes and pipes" },
-            { code: "7609", description: "Aluminium tube or pipe fittings" },
-            {
-                code: "7610",
-                description: "Aluminium structures and parts of structures",
-            },
-            {
-                code: "7611",
-                description:
-                    "Aluminium reservoirs, tanks, vats, capacity > 300 litres",
-            },
-            {
-                code: "7612",
-                description:
-                    "Aluminium casks, drums, cans, boxes, capacity ≤ 300 litres",
-            },
-            {
-                code: "7613",
-                description:
-                    "Aluminium containers for compressed or liquefied gas",
-            },
-            {
-                code: "7614",
-                description:
-                    "Stranded wire, cables, plaited bands of aluminium",
-            },
-            { code: "7616", description: "Other articles of aluminium" },
-        ],
-        cement: [
-            { code: "2507 00 80", description: "Other kaolinic clays" },
-            { code: "2523 10 00", description: "Cement clinkers" },
-            { code: "2523 21 00", description: "White Portland cement" },
-            { code: "2523 29 00", description: "Other Portland cement" },
-            { code: "2523 30 00", description: "Aluminous cement" },
-            { code: "2523 90 00", description: "Other hydraulic cements" },
-        ],
-        fertilisers: [
-            {
-                code: "2808 00 00",
-                description: "Nitric acid; sulphonitric acids",
-            },
-            {
-                code: "2814",
-                description: "Ammonia, anhydrous or in aqueous solution",
-            },
-            { code: "2834 21 00", description: "Nitrates of potassium" },
-            {
-                code: "3102",
-                description: "Mineral or chemical fertilisers, nitrogenous",
-            },
-            {
-                code: "3105",
-                description:
-                    "Mineral or chemical fertilisers (2-3 elements, except 3105 60 00)",
-            },
-        ],
-        hydrogen: [{ code: "2804 10 00", description: "Hydrogen" }],
-    };
 
     // Constants for emissions calculations
+    // ENV_VARIABLES
     const ELECTRICITY_EF_UK = 0.193; // kg CO2e per kWh (UK, 2024 estimate)
     const NATURAL_GAS_EF = 0.202; // kg CO2e per kWh (based on 56.1 tCO2/TJ from IPCC 2006 GL)
     const NATURAL_GAS_NCV = 48.0; // Net Calorific Value in GJ/t (from IPCC 2006 GL)
@@ -677,6 +447,7 @@ export const CBAMCalculator = () => {
                     <p className='text-gray-500'>
                         For UK Steel Products Manufacturers Exporting to the EU
                     </p>
+                    asjdhki
                 </div>
                 <div className='flex items-center px-4 py-2 bg-blue-50 rounded text-blue-700'>
                     {/* <Info className='w-5 h-5 mr-2' /> */}
@@ -1831,7 +1602,7 @@ export const CBAMCalculator = () => {
                                                 0.00
                                             </td>
                                         </tr>
-
+                                        {/* TO DO:  Need to enter user's production emissions */}
                                         {/* Material type breakdown rows */}
                                         {suppliers.map((supplier, index) => (
                                             <tr key={supplier.id}>

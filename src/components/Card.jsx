@@ -1,5 +1,10 @@
-export function Card({ children }) {
-    return <div className=''>{children}</div>;
+export function Card({ className, children }) {
+    return (
+        <div
+            className={`${className} max-w-sm mx-auto bg-white shadow-lg rounded-2xl p-6`}>
+            {children}
+        </div>
+    );
 }
 export function CardHeader({ children }) {
     return <div className=''>{children}</div>;

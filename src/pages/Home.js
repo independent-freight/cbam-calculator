@@ -1,7 +1,9 @@
-export function Home({}) {
+import { CBAMCalculator } from "cbam-calculator";
+
+export function Home() {
     return (
         <div>
-            <h1>This is the home page</h1>
+            <CBAMCalculator />
         </div>
     );
 }

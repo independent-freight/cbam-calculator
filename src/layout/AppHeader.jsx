@@ -1,3 +1,9 @@
-export function AppHeader({}) {
-    return <h1> CBAM Calculator</h1>;
+import { Text } from "components/Text";
+
+export function AppHeader({ header }) {
+    return (
+        <Text className='text-left' type='semiBold-header'>
+            {header}
+        </Text>
+    );
 }
