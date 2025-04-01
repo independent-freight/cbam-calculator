@@ -1,0 +1,7 @@
+[
+    { "value": "iron_steel", "label": "Iron and Steel" },
+    { "value": "aluminium", "label": "Aluminium" },
+    { "value": "cement", "label": "Cement" },
+    { "value": "fertilisers", "label": "Fertilisers" },
+    { "value": "hydrogen", "label": "Hydrogen" }
+]

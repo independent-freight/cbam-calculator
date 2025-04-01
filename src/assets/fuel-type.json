@@ -1,0 +1,25 @@
+[
+    { "value": "Crude oil", "label": "Crude oil" },
+    { "value": "Orimulsion", "label": "Orimulsion" },
+    { "value": "Natural gas liquids", "label": "Natural gas liquids" },
+    { "value": "Motor gasoline", "label": "Motor gasoline" },
+    {
+        "value": "Kerosene (other than jet kerosene)",
+        "label": "Kerosene (other than jet kerosene)"
+    },
+    { "value": "Shale oil", "label": "Shale oil" },
+    { "value": "Gas/Diesel oil", "label": "Gas/Diesel oil" },
+    { "value": "Residual fuel oil", "label": "Residual fuel oil" },
+    {
+        "value": "Liquefied petroleum gases",
+        "label": "Liquefied petroleum gases"
+    },
+    { "value": "Ethane", "label": "Ethane" },
+    { "value": "Naphtha", "label": "Naphtha" },
+    { "value": "Bitumen", "label": "Bitumen" },
+    { "value": "Lubricants", "label": "Lubricants" },
+    { "value": "Petroleum coke", "label": "Petroleum coke" },
+    { "value": "Refinery feedstocks", "label": "Refinery feedstocks" },
+    { "value": "Refinery gas", "label": "Refinery gas" },
+    { "value": "Paraffin waxes", "label": "Paraffin waxes" }
+]

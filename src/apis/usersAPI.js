@@ -86,5 +86,7 @@ export const getUserAsync = async () => {
                 code: response?.data?.code ?? "UI_ERROR",
             };
         }
-    } catch (error) {}
+    } catch (error) {
+        return errorHandler(error, "GET User details");
+    }
 };

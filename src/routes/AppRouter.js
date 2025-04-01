@@ -6,6 +6,7 @@ import { Reports } from "pages/Reports";
 import { Signin } from "pages/Signin";
 import { Signup } from "pages/Signup";
 import { Routes, Route } from "react-router-dom";
+import { AddProductCBAM } from "pages/AddProductCBAM";
 
 export function AppRouter({ loggedIn, onLogout }) {
     return (
@@ -16,8 +17,9 @@ export function AppRouter({ loggedIn, onLogout }) {
                 <Route path='/register' element={<Signup />} />
                 <Route path='/sign-in' element={<Signin />} />
                 <Route path='/reports' element={<Reports />} />
-                <Route path='/cbam' element={<ProductCBAM />} />
+                <Route path='/product-cbam' element={<ProductCBAM />} />
                 <Route path='/profile' element={<Profile />} />
+                <Route path='/product-cbam/add' element={<AddProductCBAM />} />
             </Route>
         </Routes>
     );

@@ -1,0 +1,19 @@
+{
+    "iron_steel": [
+        { "value": "BF-BOF Steel", "label": "BF-BOF Steel" },
+        { "value": "EAF Steel", "label": "EAF Steel" },
+        { "value": "Stainless Steel", "label": "Stainless Steel" },
+        { "value": "Low Carbon Steel", "label": "Low Carbon Steel" }
+    ],
+    "aluminium": [
+        { "value": "Primary Aluminium", "label": "Primary Aluminium" },
+        { "value": "Secondary Aluminium", "label": "Secondary Aluminium" },
+        { "value": "Aluminium Alloy", "label": "Aluminium Alloy" },
+        { "value": "Low Carbon Aluminium", "label": "Low Carbon Aluminium" }
+    ],
+    "cement": [{ "value": "Generic Material", "label": "Generic Material" }],
+    "fertilisers": [
+        { "value": "Generic Material", "label": "Generic Material" }
+    ],
+    "hydrogen": [{ "value": "Generic Material", "label": "Generic Material" }]
+}
