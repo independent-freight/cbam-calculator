@@ -11,13 +11,15 @@ export const requiresAuth = (url, method) => {
     if (authorizedApis.includes(url)) {
         return true;
     }
-    return authorizedDynamicApis.some((pattern) =>
-        Object.keys(pattern)?.length > 0
-            ? pattern.url.test(url) &&
-              String(method).toLowerCase() ===
-                  String(pattern.method).toLowerCase()
-            : pattern.test(url)
-    );
+
+    return authorizedDynamicApis.some((pattern) => {
+        console.log(url, pattern);
+        return Object.keys(pattern)?.length > 0
+            ? pattern?.url?.test(url) &&
+                  String(method).toLowerCase() ===
+                      String(pattern.method).toLowerCase()
+            : pattern.test(url);
+    });
 };
 
 const getToken = () => window.sessionStorage.getItem("token");

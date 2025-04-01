@@ -10,6 +10,9 @@ export function Text({ type = "", children, className, onClick }) {
                 case "body":
                     style += " text-base";
                     break;
+                case "subHeader":
+                    style += " text-xl";
+                    break;
                 case "header":
                     style += " text-3xl";
                     break;

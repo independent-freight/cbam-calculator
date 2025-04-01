@@ -1,6 +1,14 @@
 import { Text } from "./Text";
 
-export function Button({ label, onClick, className, style, type, error }) {
+export function Button({
+    label,
+    onClick,
+    className,
+    style,
+    type,
+    error,
+    labelClass,
+}) {
     return (
         <div className={`${className} flex flex-col`}>
             <button
@@ -9,7 +17,9 @@ export function Button({ label, onClick, className, style, type, error }) {
                 onClick={onClick}>
                 {label}
             </button>
-            <Text type='error-label-semiBold' className='m-[10px]'>
+            <Text
+                type='error-label-semiBold'
+                className={`m-[10px] ${labelClass ?? ""}`}>
                 {error}
             </Text>
         </div>
