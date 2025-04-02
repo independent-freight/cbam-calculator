@@ -26,7 +26,10 @@ export function Text({ type = "", children, className, onClick }) {
                     style += " text-blue-500";
                     break;
                 case "error":
-                    style += "text-red-500";
+                    style += " text-red-500";
+                    break;
+                case "faded":
+                    style += " text-gray-400";
                     break;
                 default:
                     return;

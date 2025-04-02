@@ -246,8 +246,8 @@ export const CBAMCalculator = () => {
         return calculateSupplierEmissions().map((supplier) => ({
             name: supplier.name,
             emissionsTotal: supplier.emissionsTotal,
-            directEmissionsTotal: supplier.directEmissionsTotal,
-            indirectEmissionsTotal: supplier.indirectEmissionsTotal,
+            // directEmissionsTotal: supplier.directEmissionsTotal,
+            // indirectEmissionsTotal: supplier.indirectEmissionsTotal,
             quantity: supplier.quantity,
             intensity: supplier.totalEmissions,
         }));

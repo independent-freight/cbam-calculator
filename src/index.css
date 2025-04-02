@@ -4,6 +4,9 @@
 
 #root {
     min-width: 100vh;
+    height: 100%; /* Make sure the root div takes up full height */
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Allow the layout to stack */
 }
 
 body {
@@ -18,4 +21,10 @@ body {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
         monospace;
+}
+html,
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden; /* Prevent scrolling on the body and html */
 }

@@ -8,6 +8,7 @@ export function Input({
     error,
     postIcon,
     className,
+    type,
     ...props
 }) {
     return (
@@ -21,6 +22,7 @@ export function Input({
                     value={value}
                     onChange={onChange}
                     placeholder={placeholder}
+                    type={type}
                     {...props}
                 />
                 {postIcon && postIcon}

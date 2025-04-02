@@ -13,7 +13,6 @@ export const requiresAuth = (url, method) => {
     }
 
     return authorizedDynamicApis.some((pattern) => {
-        console.log(url, pattern);
         return Object.keys(pattern)?.length > 0
             ? pattern?.url?.test(url) &&
                   String(method).toLowerCase() ===

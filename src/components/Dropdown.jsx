@@ -49,7 +49,7 @@ export function Dropdown({
                 onClick={() => setIsOpen(!isOpen)}
                 className='flex justify-between items-center w-full p-3 border border-gray-300 rounded-lg focus:outline-none '>
                 <Text
-                    type='body-text'
+                    type={`body-${labelValue ? "text" : "faded"}`}
                     className='w-[100%] overflow-hidden text-ellipsis truncate text-start'>
                     {labelValue ?? placeholder}
                 </Text>

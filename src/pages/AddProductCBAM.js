@@ -10,13 +10,18 @@ import {
 } from "assets/validation";
 import productMaterialTypes from "assets/product-material-type.json";
 import fuelType from "assets/fuel-type.json";
+import electrictySources from "assets/electricity-source.json";
 import { CBAMSummary } from "components/CBAMSummary";
+import { calculateProductCBAMAsync } from "apis/productsAPI";
+import { useNavigate } from "react-router-dom";
 
 export function AddProductCBAM() {
+    const navigate = useNavigate();
     const [productMaterial, setProductMaterial] = useState(null);
     const [annualProduction, setAnnualProduction] = useState(null);
     const [cbamState, setCBAMState] = useState(null);
     const [customStep, setCustomStep] = useState(0);
+    const [submitError, setSubmitError] = useState("");
     const [initialFormData, setInitialFormData] = useState({
         production_process: {
             energy_used: null,
@@ -25,6 +30,8 @@ export function AddProductCBAM() {
             annual_production: null,
             material_yield: null,
             fuel_type: null,
+            electricity_used: null,
+            electricity_source: null,
         },
         subcontractors: [
             { name: null, indirect_emissions: null, direct_emissions: null },
@@ -36,7 +43,7 @@ export function AddProductCBAM() {
                 direct_emissions: null,
                 material_type: null,
                 quantity: null,
-                country: null,
+                country_code: null,
             },
         ],
     });
@@ -73,16 +80,31 @@ export function AddProductCBAM() {
                         placeholder: "Material yield in percentage",
                     },
                     {
-                        name: "energy_used",
-                        label: "Energy Used (tonnes)",
-                        type: "number",
-                        placeholder: "Energy used in tonnes",
-                    },
-                    {
                         name: "fuel_type",
                         label: "Fuel Type",
                         options: fuelType,
                         componentType: "dropdown",
+                        placeholder: "Select fuel used for production",
+                    },
+                    {
+                        name: "energy_used",
+                        label: "Energy Used (tonnes/year)",
+                        type: "number",
+                        placeholder: "Energy used in tonnes",
+                    },
+                    {
+                        name: "electricity_source",
+                        label: "Electricity Source",
+                        componentType: "dropdown",
+                        options: electrictySources,
+                        placeholder:
+                            "Select electricity source used for production",
+                    },
+                    {
+                        name: "electricity_used",
+                        label: "Electricity Used (kWh/year)",
+                        type: "number",
+                        placeholder: "Electricity used in kWh",
                     },
                     {
                         name: "material_category",
@@ -90,6 +112,7 @@ export function AddProductCBAM() {
                         options: productMaterials,
                         setField: (value) => setProductMaterial(value),
                         componentType: "dropdown",
+                        placeholder: "Select Material",
                     },
                     {
                         name: "product_cn_code",
@@ -98,6 +121,7 @@ export function AddProductCBAM() {
                             commodities[productMaterial] ?? []
                         ),
                         componentType: "dropdown",
+                        placeholder: "Select Product CN Code",
                     },
                 ],
                 validationSchema: productionSchema,
@@ -134,7 +158,7 @@ export function AddProductCBAM() {
                 fields: [
                     { name: "name", label: "Supplier Name", type: "text" },
                     {
-                        name: "country",
+                        name: "country_code",
                         label: "Country",
                         type: "text",
                     },
@@ -171,7 +195,18 @@ export function AddProductCBAM() {
         ],
         [productMaterial, annualProduction]
     );
-    const handleAddProduct = async (formData) => {};
+    const handleAddProduct = async (formData) => {
+        let response = await calculateProductCBAMAsync(formData);
+        if (response?.error) {
+            setSubmitError(
+                "Failed to calculate Product's CBAM. Please try again after some time."
+            );
+        } else {
+            navigate(`/product-cbam/${response?.product_CBAM_id}`, {
+                state: { ...response?.result },
+            });
+        }
+    };
 
     const handleGoBack = (data) => {
         setInitialFormData(data);
@@ -186,6 +221,7 @@ export function AddProductCBAM() {
                     cbamKeys={getCBAMFormLabels(formSteps)}
                     onSubmit={handleAddProduct}
                     goBack={handleGoBack}
+                    error={submitError}
                 />
             ) : (
                 <WizardForm

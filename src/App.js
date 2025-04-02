@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { setSignin } from "state/userSlice";
 import { getUserAsync, logoutAsync } from "apis/usersAPI";
 import { useNavigate } from "react-router-dom";
-import { LoaderCircle } from "lucide-react";
+import { Loader } from "components/Loader";
 
 function App() {
     const dispatch = useDispatch();
@@ -49,12 +49,7 @@ function App() {
     return (
         <div className='App'>
             {appLoading ? (
-                <div className='flex justify-center items-center min-h-screen min-w-full'>
-                    <LoaderCircle
-                        className='animate-spin text-blue-500'
-                        size={48}
-                    />
-                </div>
+                <Loader />
             ) : (
                 <AppRouter
                     loggedIn={loggedIn}

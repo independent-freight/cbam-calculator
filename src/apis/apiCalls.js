@@ -1,7 +1,7 @@
 import { apiCall } from "./axiosconfig";
 
-export const getApiCall = async (url) => {
-    return apiCall.get(url);
+export const getApiCall = async (url, options = {}) => {
+    return apiCall.get(url, options);
 };
 
 export const postApiCall = async (url, body = {}, headers = {}) => {

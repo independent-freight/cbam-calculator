@@ -65,14 +65,7 @@ export function WizardForm({
         prefixName
     ) => {
         return fields.map(
-            ({
-                componentType = "input",
-                name,
-                label,
-                type,
-                setField,
-                ...props
-            }) => {
+            ({ componentType = "input", name, label, setField, ...props }) => {
                 let fieldName = `${
                     prefixName === 0 || prefixName ? `${prefixName}.` : ""
                 }${name}`;
