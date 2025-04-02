@@ -32,6 +32,12 @@ export const productionSchema = Yup.object({
         ),
         fuel_type: Yup.string().required("Fuel type used is require"),
         product_cn_code: Yup.string().required("Product CN Code is required"),
+        electricity_used: Yup.number().required(
+            "Electricity used is required."
+        ),
+        electricity_used: Yup.string().required(
+            "Electricity source is required."
+        ),
     }),
 });
 
@@ -83,43 +89,40 @@ export const subcontractorSchema = Yup.object({
 
 export const supplierSchema = (annualProduction) =>
     Yup.object({
-        suppliers: Yup.array()
-            .of(
-                Yup.object().shape({
-                    name: Yup.string().required(
-                        "Name of supplier is required."
+        suppliers: Yup.array().of(
+            Yup.object().shape({
+                name: Yup.string().required("Name of supplier is required."),
+                country_code: Yup.string().required(
+                    "Country of supplier is required"
+                ),
+                material_type: Yup.string().required(
+                    "Material type is required."
+                ),
+                quantity: Yup.number("Quantity needs to be a number")
+                    .required("Quantity is required")
+                    .test(
+                        "quantity-leq-annual-production",
+                        `Quantity must be less than or equal to the annual production value of ${annualProduction}`,
+                        (value) => value <= annualProduction
                     ),
-                    country: Yup.string().required(
-                        "Country of supplier is required"
-                    ),
-                    material_type: Yup.string().required(
-                        "Material type is required."
-                    ),
-                    quantity: Yup.number("Quantity needs to be a number")
-                        .required("Quantity is required")
-                        .test(
-                            "quantity-leq-annual-production",
-                            `Quantity must be less than or equal to the annual production value of ${annualProduction}`,
-                            (value) => value <= annualProduction
-                        ),
-                    indirect_emissions: Yup.number(
-                        "Indirect Emissions need to be a number"
-                    ).required("Indirect Emissions is required"),
-                    direct_emissions: Yup.number(
-                        "Direct Emissions need to be a number"
-                    ).required("Direct Emissions is required"),
-                })
-            )
-            .test(
-                "total-quantity-equal-annual-production",
-                `The total quantity of all suppliers must equal to the annual production value of ${annualProduction}`,
-                (suppliers) => {
-                    const totalQuantity = suppliers.reduce(
-                        (acc, supplier) =>
-                            Number(acc) + Number(supplier.quantity),
-                        0
-                    );
-                    return totalQuantity === Number(annualProduction);
-                }
-            ),
+                indirect_emissions: Yup.number(
+                    "Indirect Emissions need to be a number"
+                ).required("Indirect Emissions is required"),
+                direct_emissions: Yup.number(
+                    "Direct Emissions need to be a number"
+                ).required("Direct Emissions is required"),
+            })
+        ),
+        // .test(
+        //     "total-quantity-equal-annual-production",
+        //     `The total quantity of all suppliers must equal to the annual production value of ${annualProduction}`,
+        //     (suppliers) => {
+        //         const totalQuantity = suppliers.reduce(
+        //             (acc, supplier) =>
+        //                 Number(acc) + Number(supplier.quantity),
+        //             0
+        //         );
+        //         return totalQuantity === Number(annualProduction);
+        //     }
+        // ),
     });

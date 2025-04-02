@@ -1,9 +1,11 @@
-import { CBAM_URL, productCBAMListUrl } from "assets/apis";
+import { CBAM_URL, CBAM_LIST_URL, cbamDetailsUrl } from "assets/apis";
 import { errorHandler, getApiCall, postApiCall } from "./apiCalls";
 
-export const getProductCBAMListAsync = async (page, limit) => {
+export const getProductCBAMListAsync = async (page = 1, limit = 10) => {
     try {
-        let response = await getApiCall(productCBAMListUrl(page, limit));
+        let response = await getApiCall(CBAM_LIST_URL, {
+            params: { page: page, limit: limit },
+        });
         if (response?.data) {
             return {
                 message: "Sucessfully fetched product CBAMs of user.",
@@ -26,7 +28,7 @@ export const calculateProductCBAMAsync = async (data) => {
         if (response?.data) {
             return {
                 message: "Sucessfully calculated CBAM result.",
-                user: response?.data,
+                ...response?.data,
             };
         } else {
             return {
@@ -35,6 +37,25 @@ export const calculateProductCBAMAsync = async (data) => {
             };
         }
     } catch (error) {
-        return errorHandler(error, "GET Product CBAM list");
+        return errorHandler(error, "CALCULATE Product CBAM list");
+    }
+};
+
+export const getCBAMDetailsAsync = async (id) => {
+    try {
+        let response = await getApiCall(cbamDetailsUrl(id));
+        if (response?.data) {
+            return {
+                message: "Sucessfully fetched CBAM data.",
+                data: response?.data,
+            };
+        } else {
+            return {
+                error: response?.data?.message ?? "Something went wrong!",
+                code: response?.data?.code ?? "UI_ERROR",
+            };
+        }
+    } catch (error) {
+        return errorHandler(error, "GET CBAM Details");
     }
 };

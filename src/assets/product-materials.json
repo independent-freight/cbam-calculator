@@ -1,6 +1,14 @@
 [
-    { "value": "iron_steel", "label": "Iron and Steel" },
-    { "value": "aluminium", "label": "Aluminium" },
+    {
+        "value": "iron_steel",
+        "label": "Iron and Steel",
+        "extra_label": "Iron or Steel products"
+    },
+    {
+        "value": "aluminium",
+        "label": "Aluminium",
+        "extraKey": "Aluminium products"
+    },
     { "value": "cement", "label": "Cement" },
     { "value": "fertilisers", "label": "Fertilisers" },
     { "value": "hydrogen", "label": "Hydrogen" }

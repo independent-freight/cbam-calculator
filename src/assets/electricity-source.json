@@ -1,0 +1,22 @@
+[
+    {
+        "value": "D.4(a)",
+        "label": "D.4(a) - EF based on IEA data"
+    },
+    {
+        "value": "D.4(b)",
+        "label": "D.4(b) - EF based on other publicly available data"
+    },
+    {
+        "value": "D.4.1",
+        "label": "D.4.1 - EF of electricity produced in installation (no cogeneration)"
+    },
+    {
+        "value": "D.4.2",
+        "label": "D.4.2 - EF of electricity produced by cogeneration"
+    },
+    {
+        "value": "Mix",
+        "label": "Mix - Determined as mix of methods above"
+    }
+]

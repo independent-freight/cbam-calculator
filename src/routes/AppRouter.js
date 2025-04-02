@@ -7,6 +7,7 @@ import { Signin } from "pages/Signin";
 import { Signup } from "pages/Signup";
 import { Routes, Route } from "react-router-dom";
 import { AddProductCBAM } from "pages/AddProductCBAM";
+import { ProductCBAMDetails } from "pages/ProductCBAMDetails";
 
 export function AppRouter({ loggedIn, onLogout }) {
     return (
@@ -20,6 +21,10 @@ export function AppRouter({ loggedIn, onLogout }) {
                 <Route path='/product-cbam' element={<ProductCBAM />} />
                 <Route path='/profile' element={<Profile />} />
                 <Route path='/product-cbam/add' element={<AddProductCBAM />} />
+                <Route
+                    path='/product-cbam/:id'
+                    element={<ProductCBAMDetails />}
+                />
             </Route>
         </Routes>
     );

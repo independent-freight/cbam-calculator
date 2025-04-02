@@ -3,7 +3,7 @@ import { Card } from "components/Card";
 import { Button } from "components/Button";
 import { ArrowLeft } from "lucide-react";
 
-export function CBAMSummary({ data, cbamKeys, onSubmit, goBack }) {
+export function CBAMSummary({ data, cbamKeys, onSubmit, goBack, error }) {
     const renderObject = (renderData) => {
         return Object.keys(renderData).map((key) => {
             const value = renderData[key];
@@ -39,7 +39,12 @@ export function CBAMSummary({ data, cbamKeys, onSubmit, goBack }) {
                 </Text>
             </div>
             <div>{renderObject(data)}</div>
-            <Button type='button' onClick={onSubmit} label='Submit' />
+            <Button
+                type='button'
+                onClick={() => onSubmit(data)}
+                label='Submit'
+                error={error}
+            />
         </Card>
     );
 }

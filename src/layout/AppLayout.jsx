@@ -28,9 +28,9 @@ export default function AppLayout({ loggedIn, onLogout }) {
     };
     return (
         <div className='min-h-screen flex flex-col'>
-            <div className='flex flex-col md:flex-row flex-1'>
+            <div className='flex flex-col md:flex-row flex-1 min-h-screen'>
                 {loggedIn && (
-                    <aside className='hidden md:flex flex-col w-64 min-h-screen bg-gray-800 text-white p-4 bg-gray-100 w-full md:w-60'>
+                    <aside className='hidden md:flex flex-col w-64 bg-gray-800 text-white p-4 bg-gray-100'>
                         <SideNavigationBar
                             onLogout={handleLogout}
                             setHeader={setSelectedHeader}
@@ -52,14 +52,16 @@ export default function AppLayout({ loggedIn, onLogout }) {
                         setHeader={setSelectedHeader}
                     />
                 )}
-
-                <main
-                    className={`flex-1 transition-opacity duration-300 ${
-                        selectedHeader && "mt-[20px] mx-[50px]"
-                    } ${isOpen ? "opacity-50" : "opacity-100"}`}>
-                    <AppHeader header={selectedHeader} />
-                    <Outlet />
-                </main>
+                <div className={`flex flex-col h-screen w-[100%] `}>
+                    <main
+                        className={`flex-1 transition-opacity duration-300 ${
+                            isOpen ? "opacity-50" : "opacity-100"
+                        } overflow-y-auto min-h-screen`}>
+                        {" "}
+                        <AppHeader header={selectedHeader} />
+                        <Outlet className='mx-[50px]' />
+                    </main>
+                </div>
             </div>
         </div>
     );
