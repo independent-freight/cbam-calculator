@@ -3,23 +3,23 @@ import { CBAMGuide } from "components/CBAMGuide";
 import { Loader } from "components/Loader";
 import { Table } from "components/Table";
 import { Text } from "components/Text";
-import { formatCBAMDetails } from "helpers/formatData";
-import { ChevronLeft } from "lucide-react";
+import { formatCBAMDetails, formatNumber } from "helpers/formatData";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { updateCBAMDetails } from "state/productCBAMSlice";
 import productsCNCode from "assets/commodity-codes.json";
 import { BarChart } from "components/BarChart";
 import LineChart from "components/LineChart";
+import { AppHeader } from "layout/AppHeader";
+import "App.css";
 
 export function ProductCBAMDetails() {
     const { id } = useParams();
-    const { state } = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const cbamDetails = useSelector(
-        (state) => state.productCBAM?.details?.[id] ?? { results: [] }
+        (state) => state.productCBAM?.details?.[id]
     );
 
     const [isLoading, setLoading] = useState(false);
@@ -29,28 +29,26 @@ export function ProductCBAMDetails() {
         dispatch(updateCBAMDetails({ id, data: { ...response?.data } }));
         setTimeout(() => setLoading(false), 500);
     };
-    const formatNumber = (number) => Number(number).toFixed(3);
 
     const getCBAMTableSubHeader = (data = []) => {
         let subData = data.reduce(
             (acc, row) => {
-                acc.see_direct = Number(
-                    formatNumber(acc.see_direct + row?.see_direct)
+                acc.see_direct = formatNumber(acc.see_direct + row?.see_direct);
+                acc.see_indirect = formatNumber(
+                    acc.see_indirect + row?.see_indirect
                 );
-                acc.see_indirect = Number(
-                    formatNumber(acc.see_indirect + row?.see_indirect)
+                acc.see_total = formatNumber(acc.see_total + row?.see_total);
+
+                acc.emb_em_direct = formatNumber(
+                    acc.emb_em_direct + row?.emb_em_direct
                 );
-                acc.see_total = Number(
-                    formatNumber(acc.see_total + row?.see_total)
+
+                acc.emb_em_indirect = formatNumber(
+                    acc.emb_em_indirect + row?.emb_em_indirect
                 );
-                acc.emb_em_direct = Number(
-                    formatNumber(acc.emb_em_direct + row?.emb_em_direct)
-                );
-                acc.emb_em_indirect = Number(
-                    formatNumber(acc.emb_em_indirect + row?.emb_em_indirect)
-                );
-                acc.emb_em_total = Number(
-                    formatNumber(acc.emb_em_total + row?.emb_em_total)
+
+                acc.emb_em_total = formatNumber(
+                    acc.emb_em_total + row?.emb_em_total
                 );
                 return acc;
             },
@@ -102,7 +100,8 @@ export function ProductCBAMDetails() {
     ];
 
     useEffect(() => {
-        if (id && !state) {
+        if (id && !cbamDetails) {
+            console.log(id, "ID");
             setupCBAMDetails(id);
         }
     }, [id]);
@@ -118,7 +117,7 @@ export function ProductCBAMDetails() {
     const handleGoBack = () => navigate("/product-cbam");
 
     const supplierEmissionChart = () => {
-        return cbamDetails.results
+        return cbamDetails?.results
             .filter((item) => item?.is_supplier)
             .map((item) => ({
                 ...item,
@@ -138,32 +137,27 @@ export function ProductCBAMDetails() {
         { key: "see_direct", color: "#82c99d", name: "See Direct (tCO2e/t)" },
     ];
     return (
-        <div className='m-[20px]'>
-            <div className='flex justify-between items-center'>
-                <ChevronLeft
-                    size={30}
-                    onClick={handleGoBack}
-                    className='cursor-pointer'
-                />
-                <Text type='semiBold-subHeader' className='flex-1 text-center'>
-                    EU CBAM Report:{" "}
-                    {cbamDetails?.production_process?.product_cn_code}
-                    {" - "}
-                    {
-                        productsCNCode[
-                            cbamDetails?.production_process?.material_category
-                        ]?.find(
-                            (item) =>
-                                item?.code ===
-                                cbamDetails?.production_process?.product_cn_code
-                        )?.description
-                    }
-                </Text>
-            </div>
+        <div className=''>
+            <AppHeader
+                header={`EU CBAM Report: ${
+                    cbamDetails?.production_process?.product_cn_code
+                } - ${
+                    productsCNCode[
+                        cbamDetails?.production_process?.material_category
+                    ]?.find(
+                        (item) =>
+                            item?.code ===
+                            cbamDetails?.production_process?.product_cn_code
+                    )?.description
+                }`}
+                showBack
+                onBackClick={handleGoBack}
+            />
+
             {isLoading && cbamDetails ? (
                 <Loader />
             ) : (
-                <div className='w-full sm:max-w-md md:max-w-lg lg:max-w-2xl xl:max-w-4xl my-[40px] mx-auto'>
+                <div className='w-full xs-max-w-md ssm-max-w-md sm:max-w-md md:max-w-lg lg:max-w-2xl xl:max-w-4xl my-[40px] mx-auto'>
                     <Table data={formattedCBAM} columns={columns} />
                     <CBAMGuide />
                     <div className='flex justify-between my-[20px]'>

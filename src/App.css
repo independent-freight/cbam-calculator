@@ -1,3 +1,17 @@
 .App {
     text-align: center;
 }
+@media (min-width: 500px) and (max-width: 639px) {
+    .ssm-max-w-md-table {
+        width: 75%; /* Adjust as necessary */
+    }
+    .ssm-max-w-md {
+        max-width: 28rem;
+    }
+}
+
+@media (max-width: 499px) {
+    .xs-max-w-md {
+        max-width: 20rem;
+    }
+}

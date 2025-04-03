@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     data: [],
-    pagination: { page: 1, limit: 10 },
+    pagination: { page: 1, limit: 5 },
     details: {},
 };
 

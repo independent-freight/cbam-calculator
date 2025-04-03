@@ -7,7 +7,7 @@
     {
         "value": "aluminium",
         "label": "Aluminium",
-        "extraKey": "Aluminium products"
+        "extra_label": "Aluminium products"
     },
     { "value": "cement", "label": "Cement" },
     { "value": "fertilisers", "label": "Fertilisers" },

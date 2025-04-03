@@ -2,7 +2,7 @@ import navigationList from "assets/navigation-list.json";
 import { Text } from "components/Text";
 import { NavLink } from "react-router-dom";
 
-export function SideNavigationBar({ onLogout, setHeader }) {
+export function SideNavigationBar({ onLogout }) {
     return (
         <nav className='mt-[50px]'>
             <ul>
@@ -21,7 +21,6 @@ export function SideNavigationBar({ onLogout, setHeader }) {
                             </Text>
                         ) : (
                             <NavLink
-                                onClick={() => setHeader(header)}
                                 to={href}
                                 className={({ isActive }) =>
                                     isActive
