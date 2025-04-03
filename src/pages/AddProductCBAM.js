@@ -14,6 +14,7 @@ import electrictySources from "assets/electricity-source.json";
 import { CBAMSummary } from "components/CBAMSummary";
 import { calculateProductCBAMAsync } from "apis/productsAPI";
 import { useNavigate } from "react-router-dom";
+import { AppHeader } from "layout/AppHeader";
 
 export function AddProductCBAM() {
     const navigate = useNavigate();
@@ -139,12 +140,12 @@ export function AddProductCBAM() {
                     {
                         name: "direct_emissions",
                         label: "Direct Emissions (tCO2e/t)",
-                        type: "text",
+                        type: "number",
                     },
                     {
                         name: "indirect_emissions",
                         label: "Indirect Emissions (tCO2e/t)",
-                        type: "text",
+                        type: "number",
                     },
                 ],
                 componentType: "fieldArray",
@@ -172,22 +173,22 @@ export function AddProductCBAM() {
                     {
                         name: "quantity",
                         label: "Quantity (tonnes)",
-                        type: "text",
+                        type: "number",
                     },
                     {
                         name: "indirect_emissions",
                         label: "Indirect Emissions (tCO2e/t)",
-                        type: "text",
+                        type: "number",
                     },
                     {
                         name: "direct_emissions",
                         label: "Direct Emissions (tCO2e/t)",
-                        type: "text",
+                        type: "number",
                     },
                     {
                         name: "total_emissions",
                         label: "Total Emissions (tCO2e/t)",
-                        type: "text",
+                        type: "number",
                     },
                 ],
                 validationSchema: supplierSchema(annualProduction),
@@ -197,14 +198,13 @@ export function AddProductCBAM() {
     );
     const handleAddProduct = async (formData) => {
         let response = await calculateProductCBAMAsync(formData);
+        console.log(response, "RESPONSE");
         if (response?.error) {
             setSubmitError(
                 "Failed to calculate Product's CBAM. Please try again after some time."
             );
         } else {
-            navigate(`/product-cbam/${response?.product_CBAM_id}`, {
-                state: { ...response?.result },
-            });
+            navigate(`/product-cbam/${response?._id}`);
         }
     };
 
@@ -213,8 +213,14 @@ export function AddProductCBAM() {
         setCustomStep(formSteps?.length - 1);
         setCBAMState(null);
     };
+    const handleExit = () => navigate("/product-cbam");
     return (
-        <div className='max-w-full m-[auto] my-[50px]'>
+        <div className='max-w-full m-[auto]'>
+            <AppHeader
+                header='Calculate Product CBAM'
+                showBack
+                onBackClick={handleExit}
+            />
             {cbamState ? (
                 <CBAMSummary
                     data={cbamState}

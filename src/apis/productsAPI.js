@@ -1,7 +1,7 @@
 import { CBAM_URL, CBAM_LIST_URL, cbamDetailsUrl } from "assets/apis";
 import { errorHandler, getApiCall, postApiCall } from "./apiCalls";
 
-export const getProductCBAMListAsync = async (page = 1, limit = 10) => {
+export const getProductCBAMListAsync = async (page = 1, limit = 5) => {
     try {
         let response = await getApiCall(CBAM_LIST_URL, {
             params: { page: page, limit: limit },
@@ -9,7 +9,7 @@ export const getProductCBAMListAsync = async (page = 1, limit = 10) => {
         if (response?.data) {
             return {
                 message: "Sucessfully fetched product CBAMs of user.",
-                user: response?.data,
+                data: response?.data,
             };
         } else {
             return {

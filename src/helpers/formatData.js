@@ -6,25 +6,30 @@ export const formatCommodityCodesDropdown = (data) =>
         label: `${item?.code} - ${item?.description}`,
     }));
 
+export const formatMaterialCategoryName = (key) => {
+    let prdMaterial = productMaterials.find(
+        (material) => material?.value === key
+    );
+    return prdMaterial?.extra_label ?? prdMaterial?.label;
+};
+
+export const formatProductName = (category, code) =>
+    commodityCodes[category]?.find((item) => item?.code === code)?.description;
+
 export const formatCBAMDetails = (
     data = [],
     material_category,
-    electricity_source
+    electricity_source = ""
 ) => {
-    let product_material = productMaterials.find(
-        (material) => material?.value === material_category
-    );
-    let productName = (code) =>
-        commodityCodes[material_category]?.find((item) => item?.code === code);
+    let product_material = formatMaterialCategoryName(material_category);
+    let productName = (code) => formatProductName(material_category, code);
     return data.map((item, index) => ({
         ...item,
-        name: item?.is_supplier
-            ? item?.name
-            : productName(item?.name)?.description,
-        product_material: product_material?.value
-            ? product_material?.extra_label ?? product_material?.label
-            : "-",
+        name: item?.is_supplier ? item?.name : productName(item?.name),
+        product_material: product_material ?? "-",
         electricity_source:
             index === 0 && electricity_source ? electricity_source : "Mix",
     }));
 };
+export const formatNumber = (number, limit) =>
+    Number(Number(number).toFixed(limit ?? 3));

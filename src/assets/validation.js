@@ -98,13 +98,9 @@ export const supplierSchema = (annualProduction) =>
                 material_type: Yup.string().required(
                     "Material type is required."
                 ),
-                quantity: Yup.number("Quantity needs to be a number")
-                    .required("Quantity is required")
-                    .test(
-                        "quantity-leq-annual-production",
-                        `Quantity must be less than or equal to the annual production value of ${annualProduction}`,
-                        (value) => value <= annualProduction
-                    ),
+                quantity: Yup.number("Quantity needs to be a number").required(
+                    "Quantity is required"
+                ),
                 indirect_emissions: Yup.number(
                     "Indirect Emissions need to be a number"
                 ).required("Indirect Emissions is required"),

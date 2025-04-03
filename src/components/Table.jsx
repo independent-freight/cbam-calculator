@@ -1,10 +1,11 @@
 import React from "react";
+import "App.css";
 export function Table({ data = [], columns, className }) {
     const columnKeys = columns[0].map((col) => col.key).filter(Boolean);
 
     return (
         <div className='overflow-x-auto border border-gray-300 border-1'>
-            <table className='min-w-full sm:w-3/4 md:w-1/2 lg:w-1/3 table-auto border-collapse border border-gray-300'>
+            <table className='ssm-max-w-md-table min-w-full sm:w-3/4 md:w-1/2 lg:w-1/3 table-auto border-collapse border border-gray-300'>
                 {/* Table Header */}
                 <thead>
                     {columns.map((headerRow, rowIndex) => (
