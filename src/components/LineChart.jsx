@@ -10,15 +10,15 @@ import {
     ResponsiveContainer,
 } from "recharts";
 
-const LineChart = ({ data, lines }) => {
+export function LineChart({ data, lines, customTooltip, hideXAxis = false }) {
     return (
         <div className='w-full h-80 md:h-96 p-4'>
             <ResponsiveContainer width='100%' height='100%'>
                 <RechartLineChart data={data}>
                     <CartesianGrid strokeDasharray='3 3' />
-                    <XAxis dataKey='name' />
+                    {!hideXAxis && <XAxis dataKey='name' />}
                     <YAxis />
-                    <Tooltip />
+                    <Tooltip content={customTooltip} />
                     <Legend />
                     {lines.map((l, key) => (
                         <Line
@@ -34,6 +34,4 @@ const LineChart = ({ data, lines }) => {
             </ResponsiveContainer>
         </div>
     );
-};
-
-export default LineChart;
+}

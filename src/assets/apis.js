@@ -7,7 +7,15 @@ export const productCBAMListUrl = (page, limit) =>
     `/product-cbam/list?page=${page}&limit=${limit}`;
 export const CBAM_URL = "/product-cbam/create";
 export const cbamDetailsUrl = (id) => `/product-cbam/${id}`;
+export const SEND_CALCULATION_EMAIL_URL = "/email/send-cbam";
+export const SUPPLIER_EMISSION_RATE_URL = "/suppliers/emission-rate";
 
-export const authorizedApis = [USER_PROFILE_URL, CBAM_URL, CBAM_LIST_URL];
+export const authorizedApis = [
+    USER_PROFILE_URL,
+    CBAM_URL,
+    CBAM_LIST_URL,
+    SEND_CALCULATION_EMAIL_URL,
+    SUPPLIER_EMISSION_RATE_URL,
+];
 
 export const authorizedDynamicApis = [/^\/product-cbam\/[a-f0-9]{24}$/];

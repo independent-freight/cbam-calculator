@@ -1,7 +1,7 @@
 import { WizardForm } from "components/WizardForm";
 import productMaterials from "assets/product-materials.json";
 import commodities from "assets/commodity-codes.json";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { formatCommodityCodesDropdown } from "helpers/formatData";
 import {
     productionSchema,
@@ -15,6 +15,12 @@ import { CBAMSummary } from "components/CBAMSummary";
 import { calculateProductCBAMAsync } from "apis/productsAPI";
 import { useNavigate } from "react-router-dom";
 import { AppHeader } from "layout/AppHeader";
+import { getSupplierEmissionsAsync } from "apis/suppliersAPI";
+import {
+    addProductionProcessTemplate,
+    addSubcontractorsTemplate,
+    addSupplierTemplate,
+} from "assets/formTemplates";
 
 export function AddProductCBAM() {
     const navigate = useNavigate();
@@ -25,29 +31,41 @@ export function AddProductCBAM() {
     const [submitError, setSubmitError] = useState("");
     const [initialFormData, setInitialFormData] = useState({
         production_process: {
-            energy_used: null,
-            material_category: null,
-            product_cn_code: null,
-            annual_production: null,
-            material_yield: null,
-            fuel_type: null,
-            electricity_used: null,
-            electricity_source: null,
+            ...addProductionProcessTemplate,
         },
-        subcontractors: [
-            { name: null, indirect_emissions: null, direct_emissions: null },
-        ],
-        suppliers: [
-            {
-                name: null,
-                indirect_emissions: null,
-                direct_emissions: null,
-                material_type: null,
-                quantity: null,
-                country_code: null,
-            },
-        ],
+        subcontractors: [{ ...addSubcontractorsTemplate }],
+        suppliers: [{ ...addSupplierTemplate }],
     });
+    // CHECKPOINT
+    // const [initialSupplier, setInitialSupplier] = useState();
+
+    const handleSupplierFieldChange = async (index, field, value, prevData) => {
+        const updatedSuppliers = initialFormData?.suppliers.map((item, i) =>
+            i === index ? { ...item, ...prevData?.suppliers[index] } : item
+        );
+        updatedSuppliers[index][field] = value;
+        if (
+            updatedSuppliers[index].name &&
+            updatedSuppliers[index].material_type &&
+            updatedSuppliers[index]?.name
+        ) {
+            const response = await getSupplierEmissionsAsync(
+                updatedSuppliers[index].material_type,
+                updatedSuppliers[index].country_code,
+                updatedSuppliers[index].name
+            );
+            if (response?.data?.indirect_emissions) {
+                updatedSuppliers[index].indirect_emissions =
+                    response?.data.indirect_emissions;
+                updatedSuppliers[index].direct_emissions =
+                    response?.data.direct_emissions; // Set the prefetched value
+            }
+
+            setInitialFormData({ ...prevData, suppliers: updatedSuppliers });
+        } else {
+            setInitialFormData({ ...prevData, suppliers: updatedSuppliers });
+        }
+    };
 
     const getCBAMFormLabels = () => {
         let valuePairs = {};
@@ -59,6 +77,26 @@ export function AddProductCBAM() {
         });
 
         return valuePairs;
+    };
+
+    const handleFieldArrayPush = (template, fieldName) => {
+        setInitialFormData((prevState) => {
+            let newState = {
+                ...prevState,
+                [fieldName]: [...prevState[fieldName], { ...template }],
+            };
+            return newState;
+        });
+    };
+    const handleFieldArrayRemove = (index, fieldName) => {
+        setInitialFormData((prevState) => {
+            let newState = {
+                ...prevState,
+                [fieldName]: prevState[fieldName].filter((_, i) => i !== index),
+            };
+
+            return newState;
+        });
     };
     const formSteps = useMemo(
         () => [
@@ -131,21 +169,25 @@ export function AddProductCBAM() {
                 id: "step2",
                 title: "Subcontractor Details",
                 name: "subcontractors",
+                template: addSubcontractorsTemplate,
                 fields: [
                     {
                         name: "name",
                         label: "Subcontractor Name",
                         type: "text",
+                        placholder: "Subcontractor Name",
                     },
                     {
                         name: "direct_emissions",
                         label: "Direct Emissions (tCO2e/t)",
                         type: "number",
+                        placholder: "Direct Emissions in tCO2e/t",
                     },
                     {
                         name: "indirect_emissions",
                         label: "Indirect Emissions (tCO2e/t)",
                         type: "number",
+                        placholder: "Indirect Emissions in tCO2e/t",
                     },
                 ],
                 componentType: "fieldArray",
@@ -156,12 +198,37 @@ export function AddProductCBAM() {
                 title: "Supplier Details",
                 name: "suppliers",
                 componentType: "fieldArray",
+                template: addSupplierTemplate,
                 fields: [
-                    { name: "name", label: "Supplier Name", type: "text" },
+                    {
+                        name: "name",
+                        label: "Supplier Name",
+                        type: "text",
+                        setField: (value, fieldName, prevData) => {
+                            const index = parseInt(fieldName.match(/\d+/)[0]);
+                            handleSupplierFieldChange(
+                                index,
+                                "name",
+                                value,
+                                prevData
+                            );
+                        },
+                        placeholder: "Supplier Name",
+                    },
                     {
                         name: "country_code",
                         label: "Country",
                         type: "text",
+                        setField: (value, fieldName, prevData) => {
+                            const index = parseInt(fieldName.match(/\d+/)[0]);
+                            handleSupplierFieldChange(
+                                index,
+                                "country_code",
+                                value,
+                                prevData
+                            );
+                        },
+                        placeholder: "Country Code",
                     },
                     {
                         componentType: "dropdown",
@@ -169,36 +236,69 @@ export function AddProductCBAM() {
                         placeholder: "Select material type",
                         label: "Material Type",
                         options: productMaterialTypes[productMaterial] ?? [],
+                        setField: (value, fieldName, prevData) => {
+                            const index = parseInt(fieldName.match(/\d+/)[0]);
+                            handleSupplierFieldChange(
+                                index,
+                                "material_type",
+                                value,
+                                prevData
+                            );
+                        },
                     },
                     {
                         name: "quantity",
                         label: "Quantity (tonnes)",
                         type: "number",
+                        placeholder: "Quantity in tonnes",
+                        setField: (value, fieldName, prevData) => {
+                            const index = parseInt(fieldName.match(/\d+/)[0]);
+                            handleSupplierFieldChange(
+                                index,
+                                "quantity",
+                                value,
+                                prevData
+                            );
+                        },
                     },
                     {
                         name: "indirect_emissions",
                         label: "Indirect Emissions (tCO2e/t)",
                         type: "number",
+                        placeholder: "Indirect Emissions in tCO2e/t",
+                        setField: (value, fieldName, prevData) => {
+                            const index = parseInt(fieldName.match(/\d+/)[0]);
+                            handleSupplierFieldChange(
+                                index,
+                                "indirect_emissions",
+                                value,
+                                prevData
+                            );
+                        },
                     },
                     {
                         name: "direct_emissions",
                         label: "Direct Emissions (tCO2e/t)",
                         type: "number",
-                    },
-                    {
-                        name: "total_emissions",
-                        label: "Total Emissions (tCO2e/t)",
-                        type: "number",
+                        placeholder: "Direct Emissions in tCO2e/t",
+                        setField: (value, fieldName, prevData) => {
+                            const index = parseInt(fieldName.match(/\d+/)[0]);
+                            handleSupplierFieldChange(
+                                index,
+                                "direct_emissions",
+                                value,
+                                prevData
+                            );
+                        },
                     },
                 ],
                 validationSchema: supplierSchema(annualProduction),
             },
         ],
-        [productMaterial, annualProduction]
+        [productMaterial, annualProduction, initialFormData]
     );
     const handleAddProduct = async (formData) => {
         let response = await calculateProductCBAMAsync(formData);
-        console.log(response, "RESPONSE");
         if (response?.error) {
             setSubmitError(
                 "Failed to calculate Product's CBAM. Please try again after some time."
@@ -215,28 +315,34 @@ export function AddProductCBAM() {
     };
     const handleExit = () => navigate("/product-cbam");
     return (
-        <div className='max-w-full m-[auto]'>
+        <div>
             <AppHeader
                 header='Calculate Product CBAM'
                 showBack
                 onBackClick={handleExit}
             />
-            {cbamState ? (
-                <CBAMSummary
-                    data={cbamState}
-                    cbamKeys={getCBAMFormLabels(formSteps)}
-                    onSubmit={handleAddProduct}
-                    goBack={handleGoBack}
-                    error={submitError}
-                />
-            ) : (
-                <WizardForm
-                    formSteps={formSteps}
-                    onSubmit={(data) => setCBAMState({ ...data })}
-                    initialValues={initialFormData}
-                    customStep={customStep}
-                />
-            )}
+            <div className='max-w-full m-[auto]'>
+                {cbamState ? (
+                    <CBAMSummary
+                        data={cbamState}
+                        cbamKeys={getCBAMFormLabels(formSteps)}
+                        onSubmit={handleAddProduct}
+                        goBack={handleGoBack}
+                        error={submitError}
+                    />
+                ) : (
+                    <WizardForm
+                        formSteps={formSteps}
+                        onSubmit={(data) => {
+                            setCBAMState({ ...data });
+                        }}
+                        initialValues={initialFormData}
+                        customStep={customStep}
+                        onFieldArrayPush={handleFieldArrayPush}
+                        onFieldArrayRemove={handleFieldArrayRemove}
+                    />
+                )}
+            </div>
         </div>
     );
 }

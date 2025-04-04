@@ -87,7 +87,7 @@ export const subcontractorSchema = Yup.object({
     ),
 });
 
-export const supplierSchema = (annualProduction) =>
+export const supplierSchema = () =>
     Yup.object({
         suppliers: Yup.array().of(
             Yup.object().shape({
