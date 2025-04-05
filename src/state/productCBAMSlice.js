@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { logoutReset } from "./storeUtils";
 
 const initialState = {
     data: [],
     pagination: { page: 1, limit: 5 },
     details: {},
+    dashboard: {},
 };
 
 export const productCBAM = createSlice({
@@ -26,9 +28,20 @@ export const productCBAM = createSlice({
 
             return state;
         },
+        updateDashboard: (state, action) => {
+            state.dashboard = { ...action.payload };
+            return state;
+        },
+    },
+    extraReducers: (builder) => {
+        builder.addCase(logoutReset, () => initialState);
     },
 });
 
-export const { setProductCBAM, updateListPage, updateCBAMDetails } =
-    productCBAM.actions;
+export const {
+    setProductCBAM,
+    updateListPage,
+    updateCBAMDetails,
+    updateDashboard,
+} = productCBAM.actions;
 export default productCBAM.reducer;

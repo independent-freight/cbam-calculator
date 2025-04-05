@@ -8,6 +8,7 @@ import { Signup } from "pages/Signup";
 import { Routes, Route } from "react-router-dom";
 import { AddProductCBAM } from "pages/AddProductCBAM";
 import { ProductCBAMDetails } from "pages/ProductCBAMDetails";
+import { ResetPassword } from "pages/ResetPassword";
 
 export function AppRouter({ loggedIn, onLogout }) {
     return (
@@ -17,6 +18,7 @@ export function AppRouter({ loggedIn, onLogout }) {
                 <Route path='/' element={<Home />} />
                 <Route path='/register' element={<Signup />} />
                 <Route path='/sign-in' element={<Signin />} />
+                <Route path='/reset-password' element={<ResetPassword />} />
                 <Route path='/reports' element={<Reports />} />
                 <Route path='/product-cbam' element={<ProductCBAM />} />
                 <Route path='/profile' element={<Profile />} />

@@ -13,7 +13,7 @@ import fuelType from "assets/fuel-type.json";
 import electrictySources from "assets/electricity-source.json";
 import { CBAMSummary } from "components/CBAMSummary";
 import { calculateProductCBAMAsync } from "apis/productsAPI";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AppHeader } from "layout/AppHeader";
 import { getSupplierEmissionsAsync } from "apis/suppliersAPI";
 import {
@@ -24,6 +24,7 @@ import {
 
 export function AddProductCBAM() {
     const navigate = useNavigate();
+    const { state } = useLocation();
     const [productMaterial, setProductMaterial] = useState(null);
     const [annualProduction, setAnnualProduction] = useState(null);
     const [cbamState, setCBAMState] = useState(null);
@@ -313,7 +314,7 @@ export function AddProductCBAM() {
         setCustomStep(formSteps?.length - 1);
         setCBAMState(null);
     };
-    const handleExit = () => navigate("/product-cbam");
+    const handleExit = () => navigate(state?.from ?? "/product-cbam");
     return (
         <div>
             <AppHeader

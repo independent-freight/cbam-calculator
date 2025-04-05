@@ -53,6 +53,9 @@ export function Signin() {
     const handleRegister = () => {
         navigate("/register");
     };
+    const handleResetNavigation = () => {
+        navigate("/reset-password");
+    };
     return (
         <div className='min-w-screen h-screen flex items-center justify-center bg-blue-50'>
             <Card className='w-[500px]'>
@@ -108,6 +111,14 @@ export function Signin() {
                         </Form>
                     )}
                 </Formik>
+
+                <Text
+                    className='pl-1 flex justify-center'
+                    type='link-label-semiBold'
+                    onClick={handleResetNavigation}>
+                    Forgot you password?
+                </Text>
+
                 <Text className='flex justify-center' type='label-text'>
                     Don't have an account?
                     <Text

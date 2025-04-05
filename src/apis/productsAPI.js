@@ -1,4 +1,9 @@
-import { CBAM_URL, CBAM_LIST_URL, cbamDetailsUrl } from "assets/apis";
+import {
+    CBAM_URL,
+    CBAM_LIST_URL,
+    cbamDetailsUrl,
+    CBAM_KPI_URL,
+} from "assets/apis";
 import { errorHandler, getApiCall, postApiCall } from "./apiCalls";
 
 export const getProductCBAMListAsync = async (page = 1, limit = 5) => {
@@ -57,5 +62,24 @@ export const getCBAMDetailsAsync = async (id) => {
         }
     } catch (error) {
         return errorHandler(error, "GET CBAM Details");
+    }
+};
+
+export const getProductKPIAsync = async () => {
+    try {
+        let response = await getApiCall(CBAM_KPI_URL);
+        if (response?.data) {
+            return {
+                message: "Sucessfully fetched KPI data.",
+                data: response?.data,
+            };
+        } else {
+            return {
+                error: response?.data?.message ?? "Something went wrong!",
+                code: response?.data?.code ?? "UI_ERROR",
+            };
+        }
+    } catch (error) {
+        return errorHandler(error, "GET KPI Details");
     }
 };

@@ -1,7 +1,13 @@
 import { Text } from "components/Text";
 import { ChevronLeft } from "lucide-react";
 
-export function AppHeader({ header, rightHeader, showBack, onBackClick }) {
+export function AppHeader({
+    header,
+    rightHeader,
+    showBack,
+    onBackClick,
+    headerType,
+}) {
     return (
         <div
             className={`flex ${
@@ -14,7 +20,9 @@ export function AppHeader({ header, rightHeader, showBack, onBackClick }) {
                     className='mr-[20px] cursor-pointer'
                 />
             )}
-            <Text className='text-left flex-1' type='semiBold-header'>
+            <Text
+                className='text-left flex-1'
+                type={headerType ?? "semiBold-header"}>
                 {header}
             </Text>
             {rightHeader && rightHeader}

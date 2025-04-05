@@ -6,6 +6,7 @@ import { setSignin } from "state/userSlice";
 import { getUserAsync, logoutAsync } from "apis/usersAPI";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "components/Loader";
+import { logoutReset } from "state/storeUtils";
 
 function App() {
     const dispatch = useDispatch();
@@ -17,7 +18,6 @@ function App() {
     const [appLoading, setAppLoading] = useState(false);
 
     const setUpUserToken = async () => {
-        setAppLoading(true);
         let response = await getUserAsync();
         if (response?.user) {
             dispatch(setSignin(response?.user));
@@ -33,6 +33,7 @@ function App() {
         if (response?.error) {
             alert("Failed to logout. Try again after some time.");
         } else {
+            dispatch(logoutReset());
             sessionStorage.clear();
             setLoggedIn(false);
             navigate("/sign-in");
@@ -40,10 +41,12 @@ function App() {
     };
 
     useEffect(() => {
+        setAppLoading(true);
         const token = window.sessionStorage.getItem("token");
         if (!user?.uid && token) setUpUserToken(token);
         else if (user?.uid && token) setLoggedIn(true);
         else handleLogout();
+        setAppLoading(false);
     }, [user]);
 
     return (

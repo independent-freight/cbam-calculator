@@ -37,16 +37,18 @@ export const formatNumber = (number, limit) =>
 export const formatEmailCalculations = (data) => {
     return data.reduce(
         (acc, curr) => {
-            acc.see_product_total += formatNumber(
-                curr?.see_direct + curr?.see_indirect
+            acc.see_product_total = formatNumber(
+                acc.see_product_total +
+                    formatNumber(curr?.see_direct + curr?.see_indirect)
             );
 
             if (curr?.is_supplier) {
                 acc.see_direct_supplier = formatNumber(
                     acc.see_direct_supplier + curr?.see_direct
                 );
-                acc.see_total_suppliers += formatNumber(
-                    curr?.see_direct + curr?.see_indirect
+                acc.see_total_suppliers = formatNumber(
+                    acc.see_total_suppliers +
+                        formatNumber(curr?.see_direct + curr?.see_indirect)
                 );
             } else {
                 acc.see_total = formatNumber(
