@@ -12,6 +12,7 @@ import {
     dynamicProtectedRoutes,
     protectedRoutes,
 } from "assets/appUrls";
+import navigationList from "assets/navigation-list.json";
 
 function App() {
     const dispatch = useDispatch();
@@ -46,6 +47,11 @@ function App() {
         }
     };
 
+    const setupTitle = (link) => {
+        let nav = navigationList.find((item) => item?.href === link);
+        document.title = nav?.title ?? "CBAM Calculator";
+    };
+
     useEffect(() => {
         setAppLoading(true);
         if (
@@ -58,6 +64,7 @@ function App() {
             setLoggedIn(false);
             navigate(APP_SIGNIN_URL);
         }
+        setupTitle(location?.pathname);
         setAppLoading(false);
     }, [location.pathname]);
 
