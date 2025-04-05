@@ -1,8 +1,10 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { SideNavigationBar } from "./SideNavigationBar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { MobileSideNavigation } from "./MobileSideNavigation";
+import logo from "assets/icons/logo.png";
+import { APP_HOME_URL } from "assets/appUrls";
 
 export default function AppLayout({ loggedIn, onLogout }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +17,14 @@ export default function AppLayout({ loggedIn, onLogout }) {
             <div className='flex flex-col md:flex-row flex-1 min-h-screen'>
                 {loggedIn && (
                     <aside className='hidden md:flex flex-col w-64 bg-gray-800 text-white p-4 bg-gray-100'>
+                        <Link to={APP_HOME_URL}>
+                            <div className='flex justify-center'>
+                                <img
+                                    src={logo}
+                                    className='bg-white rounded-full w-[80px] h-[78px] p-[10px]'
+                                />
+                            </div>
+                        </Link>
                         <SideNavigationBar onLogout={handleLogout} />
                     </aside>
                 )}
