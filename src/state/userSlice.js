@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { logoutReset } from "./storeUtils";
 
 const initialState = {
     name: "",
@@ -14,6 +15,9 @@ export const user = createSlice({
             state = { ...action.payload };
             return state;
         },
+    },
+    extraReducers: (builder) => {
+        builder.addCase(logoutReset, () => initialState);
     },
 });
 

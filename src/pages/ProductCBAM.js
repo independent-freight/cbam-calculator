@@ -1,16 +1,17 @@
 import { getProductCBAMListAsync } from "apis/productsAPI";
+import { CALCULATE_PRODUCT_CBAM_URL, PRODUCT_CBAM_URL } from "assets/appUrls";
 import { Button } from "components/Button";
 import { Card } from "components/Card";
+import { Loader } from "components/Loader";
 import { Pagination } from "components/Pagination";
 import { Text } from "components/Text";
 import {
-    formatCBAMDetails,
     formatMaterialCategoryName,
     formatNumber,
     formatProductName,
 } from "helpers/formatData";
 import { AppHeader } from "layout/AppHeader";
-import { ChevronRight, PlusCircle } from "lucide-react";
+import { Calculator, ChevronRight, Plus, PlusCircle } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -20,16 +21,23 @@ import {
     updateListPage,
 } from "state/productCBAMSlice";
 
-export function ProductCBAM() {
+export function ProductCBAM({
+    headerType = null,
+    showPagination = true,
+    path = null,
+}) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const products = useSelector((state) => state.productCBAM.data);
     const pagination = useSelector((state) => state.productCBAM.pagination);
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-
+    const [isProductLoading, setProductLoading] = useState(
+        products?.length <= 0
+    );
     const setUpProductCBAM = async (page, limit) => {
         let response = await getProductCBAMListAsync(page, limit);
         if (response?.data) dispatch(setProductCBAM(response?.data));
+        setTimeout(() => setProductLoading(false), 800);
     };
     useEffect(() => {
         if (products?.length < 0) {
@@ -40,7 +48,6 @@ export function ProductCBAM() {
         const handleResize = () => {
             setIsSmallScreen(window.innerWidth < 980);
         };
-
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
@@ -52,7 +59,9 @@ export function ProductCBAM() {
         dispatch(updateListPage(number));
     };
     const handleAddProduct = () => {
-        navigate("/product-cbam/add");
+        navigate(CALCULATE_PRODUCT_CBAM_URL, {
+            state: { from: path ?? PRODUCT_CBAM_URL },
+        });
     };
 
     const setCardValues = (info) => {
@@ -161,35 +170,40 @@ export function ProductCBAM() {
     }, [isSmallScreen]);
     const handleDetailsView = (data) => {
         dispatch(updateCBAMDetails({ id: data?._id, data }));
-        navigate(`/product-cbam/${data?._id}`, { state: data });
+        navigate(`${PRODUCT_CBAM_URL}/${data?._id}`, { state: data });
     };
     return (
-        <div className={`w-full h-screen flex flex-col`}>
+        <div className={`w-full flex flex-col`}>
             <AppHeader
+                headerType={headerType}
                 header="Your Product's CBAM Calculations"
                 rightHeader={
                     products?.length > 0 && (
-                        <PlusCircle
-                            size={30}
-                            color='#2563ea'
-                            className='cursor-pointer'
+                        <div
                             onClick={handleAddProduct}
-                        />
+                            className='w-[50px] h-[50px] cursor-pointer border rounded-full flex items-center border-[3px] p-[3px] border-blue-500'>
+                            <Plus size={20} color='#2563ea' />
+                            <Calculator size={30} color='#2563ea' />
+                        </div>
                     )
                 }
             />
 
             <div
-                className={`min-w-screen min-h-screen h-screen flex flex-col ${
-                    products?.length <= 0
-                        ? "items-center  justify-center"
+                className={`min-w-screen flex flex-col ${
+                    products?.length <= 0 || isProductLoading
+                        ? "items-center justify-center"
                         : "items-start"
-                } pb-[20px]`}>
-                {products?.length <= 0 ? (
+                } ${products?.length <= 0 ? "mt-[150px]" : ""}`}>
+                {isProductLoading ? (
+                    <Loader className='min-h-[100%]' />
+                ) : products?.length <= 0 ? (
                     <div className='flex flex-col'>
                         <Text type='body'>
-                            No Product CBAM calculations have been made. Click
-                            here to add.
+                            You haven't added any CBAM calculations yet.
+                            <br />
+                            To get started, click the button below to add your
+                            first product calculation.
                         </Text>
                         <Button
                             onClick={handleAddProduct}
@@ -223,11 +237,13 @@ export function ProductCBAM() {
                         );
                     })
                 )}
-                <Pagination
-                    currentPage={pagination?.page}
-                    totalPages={pagination?.totalPages ?? 1}
-                    onPageChange={handlePageChange}
-                />
+                {showPagination && (
+                    <Pagination
+                        currentPage={pagination?.page}
+                        totalPages={pagination?.totalPages ?? 1}
+                        onPageChange={handlePageChange}
+                    />
+                )}
             </div>
         </div>
     );

@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { loginAsync } from "apis/usersAPI";
 import { setSignin } from "state/userSlice";
 import { Formik, Form } from "formik";
+import { APP_REGISTER_URL, APP_RESET_PASSWORD_URL } from "assets/appUrls";
 
 export function Signin() {
     const [showPassword, setShowPassword] = useState(false);
@@ -51,7 +52,10 @@ export function Signin() {
     };
 
     const handleRegister = () => {
-        navigate("/register");
+        navigate(APP_REGISTER_URL);
+    };
+    const handleResetNavigation = () => {
+        navigate(APP_RESET_PASSWORD_URL);
     };
     return (
         <div className='min-w-screen h-screen flex items-center justify-center bg-blue-50'>
@@ -108,6 +112,14 @@ export function Signin() {
                         </Form>
                     )}
                 </Formik>
+
+                <Text
+                    className='pl-1 flex justify-center'
+                    type='link-label-semiBold'
+                    onClick={handleResetNavigation}>
+                    Forgot you password?
+                </Text>
+
                 <Text className='flex justify-center' type='label-text'>
                     Don't have an account?
                     <Text

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import { registerSchema } from "assets/validation";
 import { registerAsync } from "apis/usersAPI";
+import { APP_SIGNIN_URL } from "assets/appUrls";
 
 export function Signup() {
     const [showPassword, setShowPassword] = useState(false);
@@ -30,7 +31,7 @@ export function Signup() {
     };
 
     const handleSignin = () => {
-        navigate("/sign-in");
+        navigate(APP_SIGNIN_URL);
     };
     return (
         <div className='min-w-screen h-screen flex items-center justify-center bg-blue-50'>

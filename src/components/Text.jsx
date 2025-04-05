@@ -31,6 +31,9 @@ export function Text({ type = "", children, className, onClick }) {
                 case "faded":
                     style += " text-gray-400";
                     break;
+                case "success":
+                    style += " text-green-600";
+                    break;
                 default:
                     return;
             }

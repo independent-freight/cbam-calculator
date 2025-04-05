@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, FieldArray } from "formik";
 import { Button } from "components/Button"; // Using shadcn/ui for styling
 import { Card } from "./Card";
@@ -12,6 +12,8 @@ export function WizardForm({
     onSubmit,
     initialValues,
     customStep = 0,
+    onFieldArrayPush,
+    onFieldArrayRemove,
 }) {
     const [allFormData, setAllFormData] = useState({ ...initialValues });
     const [step, setStep] = useState(customStep);
@@ -23,6 +25,10 @@ export function WizardForm({
         setStep(step + 1);
     };
 
+    useEffect(() => {
+        setAllFormData((prevState) => ({ ...prevState, ...initialValues }));
+    }, [initialValues]);
+
     const handlePrev = () => {
         setStep(step - 1);
     };
@@ -31,7 +37,7 @@ export function WizardForm({
         onSubmit({ ...allFormData, ...values });
     };
 
-    const renderAddRemove = (index, remove, push) => {
+    const renderAddRemove = (index, remove, push, template) => {
         return (
             <div className='flex justify-between items-center'>
                 {/* Remove Button */}
@@ -39,16 +45,31 @@ export function WizardForm({
                     <Button
                         type='button'
                         className='text-white-500'
-                        onClick={() => remove(index)}
+                        onClick={() => {
+                            remove(index);
+                            onFieldArrayRemove &&
+                                onFieldArrayRemove(
+                                    index,
+                                    formSteps[step]?.name
+                                );
+                        }}
                         label='Remove'
                     />
                 )}
                 {/* Add new Supplier */}
                 <Button
                     type='button'
-                    onClick={() =>
-                        push(initialValues[formSteps[step]?.name][0])
-                    }
+                    onClick={() => {
+                        push(
+                            template ?? initialValues[formSteps[step]?.name][0]
+                        );
+                        onFieldArrayPush &&
+                            onFieldArrayPush(
+                                template ??
+                                    initialValues[formSteps[step]?.name][0],
+                                formSteps[step]?.name
+                            );
+                    }}
                     className='text-white-500'
                     label='Add'></Button>
             </div>
@@ -65,19 +86,29 @@ export function WizardForm({
         prefixName
     ) => {
         return fields.map(
-            ({ componentType = "input", name, label, setField, ...props }) => {
+            (
+                { componentType = "input", name, label, setField, ...props },
+                field_index
+            ) => {
                 let fieldName = `${
                     prefixName === 0 || prefixName ? `${prefixName}.` : ""
                 }${name}`;
                 return (
-                    <div key={fieldName} className='mb-4'>
+                    <div
+                        key={`${field_index}-${fieldName}-${name}`}
+                        className='mb-4'>
                         {componentType === "input" ? (
                             <Input
                                 value={values?.[name]}
                                 label={label}
                                 name={fieldName}
                                 onChange={(e) => {
-                                    setField && setField(e.target.value);
+                                    setField &&
+                                        setField(
+                                            e.target.value,
+                                            fieldName,
+                                            allFormData
+                                        );
                                     handleChange(e);
                                 }}
                                 className='py-1'
@@ -90,7 +121,12 @@ export function WizardForm({
                                 label={label}
                                 value={values?.[name] ?? null}
                                 onSelect={(option) => {
-                                    setField && setField(option);
+                                    setField &&
+                                        setField(
+                                            option,
+                                            fieldName,
+                                            allFormData
+                                        );
                                     setFieldValue(fieldName, option);
                                 }}
                                 error={touched?.[name] && errors?.[name]}
@@ -114,6 +150,7 @@ export function WizardForm({
 
             <Formik
                 initialValues={allFormData}
+                enableReinitialize={true}
                 validationSchema={formSteps[step].validationSchema}
                 onSubmit={isLastStep ? handleSubmit : handleNext}>
                 {({
@@ -156,7 +193,9 @@ export function WizardForm({
                                                     {renderAddRemove(
                                                         index,
                                                         remove,
-                                                        push
+                                                        push,
+                                                        formSteps[step]
+                                                            ?.template ?? null
                                                     )}
                                                 </>
                                             );

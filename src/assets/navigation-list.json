@@ -1,23 +1,15 @@
 [
     {
         "href": "/",
-        "title": "Home",
-        "header": "Welcome"
+        "title": "Home"
     },
     {
         "href": "/product-cbam",
-        "title": "Product CBAM",
-        "header": "Your Product's CBAM Calculations"
-    },
-    {
-        "href": "/reports",
-        "title": "Reports",
-        "header": "Your Reports"
+        "title": "CBAM Calculations"
     },
     {
         "href": "/profile",
-        "title": "Profile",
-        "header": "Your Profile"
+        "title": "Profile"
     },
     {
         "href": "/logout",

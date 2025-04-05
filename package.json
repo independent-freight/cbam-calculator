@@ -12,6 +12,7 @@
         "axios": "^1.8.4",
         "firebase": "^11.5.0",
         "formik": "^2.4.6",
+        "html2pdf.js": "^0.10.3",
         "lucide-react": "^0.484.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",

@@ -4,7 +4,7 @@ export function Button({
     label,
     onClick,
     className,
-    style,
+    style = "",
     type,
     error,
     labelClass,

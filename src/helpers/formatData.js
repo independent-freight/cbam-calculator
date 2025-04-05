@@ -33,3 +33,40 @@ export const formatCBAMDetails = (
 };
 export const formatNumber = (number, limit) =>
     Number(Number(number).toFixed(limit ?? 3));
+
+export const formatEmailCalculations = (data) => {
+    return data.reduce(
+        (acc, curr) => {
+            acc.see_product_total = formatNumber(
+                acc.see_product_total +
+                    formatNumber(curr?.see_direct + curr?.see_indirect)
+            );
+
+            if (curr?.is_supplier) {
+                acc.see_direct_supplier = formatNumber(
+                    acc.see_direct_supplier + curr?.see_direct
+                );
+                acc.see_total_suppliers = formatNumber(
+                    acc.see_total_suppliers +
+                        formatNumber(curr?.see_direct + curr?.see_indirect)
+                );
+            } else {
+                acc.see_total = formatNumber(
+                    curr?.see_direct + curr?.see_indirect
+                );
+                acc.see_indirect = curr?.see_indirect;
+                acc.see_direct = curr?.see_direct;
+            }
+
+            return acc;
+        },
+        {
+            see_product_total: 0,
+            see_direct_supplier: 0,
+            see_total_suppliers: 0,
+            see_total: 0,
+            see_indirect: 0,
+            see_direct: 0,
+        }
+    );
+};

@@ -3,6 +3,7 @@ import {
     REFRESH_TOKEN_URL,
     REGISTER_URL,
     USER_PROFILE_URL,
+    RESET_PASSWORD_URL,
 } from "assets/apis";
 import { errorHandler, getApiCall, postApiCall } from "./apiCalls";
 import { signOut } from "firebase/auth";
@@ -79,6 +80,25 @@ export const getUserAsync = async () => {
             return {
                 message: "Sucessfully fetched user.",
                 user: response?.data,
+            };
+        } else {
+            return {
+                error: response?.data?.message ?? "Something went wrong!",
+                code: response?.data?.code ?? "UI_ERROR",
+            };
+        }
+    } catch (error) {
+        return errorHandler(error, "GET User details");
+    }
+};
+export const resetPasswordAsync = async (email) => {
+    try {
+        let response = await postApiCall(RESET_PASSWORD_URL, { email });
+        if (response?.data) {
+            return {
+                message:
+                    response?.data ??
+                    "Sucessfully sent reset password to email.",
             };
         } else {
             return {
