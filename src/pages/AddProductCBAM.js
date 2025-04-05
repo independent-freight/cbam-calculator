@@ -21,6 +21,7 @@ import {
     addSubcontractorsTemplate,
     addSupplierTemplate,
 } from "assets/formTemplates";
+import { PRODUCT_CBAM_URL } from "assets/appUrls";
 
 export function AddProductCBAM() {
     const navigate = useNavigate();
@@ -305,7 +306,7 @@ export function AddProductCBAM() {
                 "Failed to calculate Product's CBAM. Please try again after some time."
             );
         } else {
-            navigate(`/product-cbam/${response?._id}`);
+            navigate(`${PRODUCT_CBAM_URL}/${response?._id}`);
         }
     };
 
@@ -314,7 +315,7 @@ export function AddProductCBAM() {
         setCustomStep(formSteps?.length - 1);
         setCBAMState(null);
     };
-    const handleExit = () => navigate(state?.from ?? "/product-cbam");
+    const handleExit = () => navigate(state?.from ?? PRODUCT_CBAM_URL);
     return (
         <div>
             <AppHeader

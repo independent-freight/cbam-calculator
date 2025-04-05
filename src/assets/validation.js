@@ -109,16 +109,4 @@ export const supplierSchema = () =>
                 ).required("Direct Emissions is required"),
             })
         ),
-        // .test(
-        //     "total-quantity-equal-annual-production",
-        //     `The total quantity of all suppliers must equal to the annual production value of ${annualProduction}`,
-        //     (suppliers) => {
-        //         const totalQuantity = suppliers.reduce(
-        //             (acc, supplier) =>
-        //                 Number(acc) + Number(supplier.quantity),
-        //             0
-        //         );
-        //         return totalQuantity === Number(annualProduction);
-        //     }
-        // ),
     });

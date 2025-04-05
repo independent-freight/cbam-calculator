@@ -4,13 +4,19 @@ import { AppRouter } from "./routes/AppRouter";
 import { useEffect, useState } from "react";
 import { setSignin } from "state/userSlice";
 import { getUserAsync, logoutAsync } from "apis/usersAPI";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Loader } from "components/Loader";
 import { logoutReset } from "state/storeUtils";
+import {
+    APP_SIGNIN_URL,
+    dynamicProtectedRoutes,
+    protectedRoutes,
+} from "assets/appUrls";
 
 function App() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
     const user = useSelector((state) => state.user);
     const [loggedIn, setLoggedIn] = useState(
         user?.uid || window.sessionStorage.getItem("token") ? true : false
@@ -36,9 +42,24 @@ function App() {
             dispatch(logoutReset());
             sessionStorage.clear();
             setLoggedIn(false);
-            navigate("/sign-in");
+            navigate(APP_SIGNIN_URL);
         }
     };
+
+    useEffect(() => {
+        setAppLoading(true);
+        if (
+            (protectedRoutes?.includes(location?.pathname) ||
+                dynamicProtectedRoutes.some((pattern) => {
+                    return pattern.test(location.pathname);
+                })) &&
+            !window.sessionStorage.getItem("token")
+        ) {
+            setLoggedIn(false);
+            navigate(APP_SIGNIN_URL);
+        }
+        setAppLoading(false);
+    }, [location.pathname]);
 
     useEffect(() => {
         setAppLoading(true);

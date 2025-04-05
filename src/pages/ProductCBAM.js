@@ -1,4 +1,5 @@
 import { getProductCBAMListAsync } from "apis/productsAPI";
+import { CALCULATE_PRODUCT_CBAM_URL, PRODUCT_CBAM_URL } from "assets/appUrls";
 import { Button } from "components/Button";
 import { Card } from "components/Card";
 import { Loader } from "components/Loader";
@@ -58,8 +59,8 @@ export function ProductCBAM({
         dispatch(updateListPage(number));
     };
     const handleAddProduct = () => {
-        navigate("/product-cbam/add", {
-            state: { from: path ?? "/product-cbam" },
+        navigate(CALCULATE_PRODUCT_CBAM_URL, {
+            state: { from: path ?? PRODUCT_CBAM_URL },
         });
     };
 
@@ -169,7 +170,7 @@ export function ProductCBAM({
     }, [isSmallScreen]);
     const handleDetailsView = (data) => {
         dispatch(updateCBAMDetails({ id: data?._id, data }));
-        navigate(`/product-cbam/${data?._id}`, { state: data });
+        navigate(`${PRODUCT_CBAM_URL}/${data?._id}`, { state: data });
     };
     return (
         <div className={`w-full flex flex-col`}>

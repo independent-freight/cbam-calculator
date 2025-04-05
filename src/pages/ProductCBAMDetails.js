@@ -21,6 +21,8 @@ import "App.css";
 import html2pdf from "html2pdf.js";
 import { Download, Mail } from "lucide-react";
 import { sendCalculationEmailAsync } from "apis/emailAPI";
+import { PRODUCT_CBAM_URL } from "assets/appUrls";
+import { Button } from "components/Button";
 
 export function ProductCBAMDetails() {
     const { id } = useParams();
@@ -32,11 +34,15 @@ export function ProductCBAMDetails() {
 
     const [isLoading, setLoading] = useState(false);
     const [isEmailLoading, setEmailLoading] = useState(false);
+    const [emptyState, setEmptyState] = useState("");
 
     const setupCBAMDetails = async (id) => {
-        setLoading(true);
         let response = await getCBAMDetailsAsync(id);
-        dispatch(updateCBAMDetails({ id, data: { ...response?.data } }));
+        if (!response?.error) {
+            dispatch(updateCBAMDetails({ id, data: { ...response?.data } }));
+        } else {
+            setEmptyState("The Product's CBAM calculation is not found.");
+        }
         setTimeout(() => setLoading(false), 500);
     };
 
@@ -110,9 +116,10 @@ export function ProductCBAMDetails() {
     ];
 
     useEffect(() => {
+        setLoading(true);
         if (id && !cbamDetails) {
             setupCBAMDetails(id);
-        }
+        } else setLoading(false);
     }, [id]);
 
     const formattedCBAM = useMemo(() => {
@@ -123,10 +130,10 @@ export function ProductCBAMDetails() {
         );
     }, [cbamDetails]);
 
-    const handleGoBack = () => navigate("/product-cbam");
+    const handleGoBack = () => navigate(PRODUCT_CBAM_URL);
 
     const supplierEmissionChart = () => {
-        return cbamDetails?.results
+        return (cbamDetails?.results ?? [])
             .filter((item) => item?.is_supplier)
             .map((item) => ({
                 ...item,
@@ -186,71 +193,103 @@ export function ProductCBAMDetails() {
         setEmailLoading(false);
     };
     return (
-        <div className=''>
-            <div className='flex justify-between items-center mr-[20px] cursor-pointer'>
-                <AppHeader
-                    header={`EU CBAM Report: ${
-                        cbamDetails?.production_process?.product_cn_code
-                    } - ${
-                        productsCNCode[
-                            cbamDetails?.production_process?.material_category
-                        ]?.find(
-                            (item) =>
-                                item?.code ===
-                                cbamDetails?.production_process?.product_cn_code
-                        )?.description
-                    }`}
-                    showBack
-                    onBackClick={handleGoBack}
-                />
-                <div className='flex gap-2'>
-                    {isEmailLoading ? (
-                        <Loader className='min-h-[10px]' size={25} />
+        <div
+            className={
+                emptyState
+                    ? "flex justify-center items-center flex-col min-h-[100%]"
+                    : ""
+            }>
+            {emptyState ? (
+                <div>
+                    <Text type='semiBold-body'>{emptyState}</Text>
+                    <Button
+                        style='mt-[10px]'
+                        label='Go back'
+                        onClick={handleGoBack}
+                    />
+                </div>
+            ) : (
+                <>
+                    {isLoading || !cbamDetails ? (
+                        <Loader />
                     ) : (
                         <>
-                            <Mail
-                                size={26}
-                                onClick={
-                                    !isEmailLoading && sendCalculationEmail
-                                }
-                            />
+                            <div className='flex justify-between items-center mr-[20px] cursor-pointer'>
+                                <AppHeader
+                                    header={`EU CBAM Report: ${
+                                        cbamDetails?.production_process
+                                            ?.product_cn_code
+                                    } - ${
+                                        productsCNCode[
+                                            cbamDetails?.production_process
+                                                ?.material_category
+                                        ]?.find(
+                                            (item) =>
+                                                item?.code ===
+                                                cbamDetails?.production_process
+                                                    ?.product_cn_code
+                                        )?.description
+                                    }`}
+                                    showBack
+                                    onBackClick={handleGoBack}
+                                />
+                                <div className='flex gap-2'>
+                                    {isEmailLoading ? (
+                                        <Loader
+                                            className='min-h-[10px]'
+                                            size={25}
+                                        />
+                                    ) : (
+                                        <>
+                                            <Mail
+                                                size={26}
+                                                onClick={
+                                                    !isEmailLoading &&
+                                                    sendCalculationEmail
+                                                }
+                                            />
 
-                            <Download size={25} onClick={handleDownload} />
+                                            <Download
+                                                size={25}
+                                                onClick={handleDownload}
+                                            />
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                            <div className='w-full xs-max-w-md ssm-max-w-md sm:max-w-md md:max-w-lg lg:max-w-2xl xl:max-w-4xl my-[40px] mx-auto'>
+                                <div id='download-pdf'>
+                                    <Table
+                                        data={formattedCBAM}
+                                        columns={columns}
+                                    />
+                                    <CBAMGuide />
+                                </div>
+
+                                <div className='flex justify-between my-[20px]'>
+                                    <div className='h-64 flex-1'>
+                                        <Text type='semiBold-body'>
+                                            Supply Chain Carbon Map
+                                        </Text>
+                                        <BarChart
+                                            data={supplierEmissionChart()}
+                                            bars={supplierBars}
+                                        />
+                                    </div>{" "}
+                                    <div className='h-64 flex-1 '>
+                                        <Text type='semiBold-body'>
+                                            Emissions Breakdown
+                                        </Text>
+                                        <LineChart
+                                            data={formattedCBAM}
+                                            lines={emissionLines}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         </>
                     )}
-                </div>
-            </div>
-
-            {isLoading && cbamDetails ? (
-                <Loader />
-            ) : (
-                <div className='w-full xs-max-w-md ssm-max-w-md sm:max-w-md md:max-w-lg lg:max-w-2xl xl:max-w-4xl my-[40px] mx-auto'>
-                    <div id='download-pdf'>
-                        <Table data={formattedCBAM} columns={columns} />
-                        <CBAMGuide />
-                    </div>
-
-                    <div className='flex justify-between my-[20px]'>
-                        <div className='h-64 flex-1'>
-                            <Text type='semiBold-body'>
-                                Supply Chain Carbon Map
-                            </Text>
-                            <BarChart
-                                data={supplierEmissionChart()}
-                                bars={supplierBars}
-                            />
-                        </div>{" "}
-                        <div className='h-64 flex-1 '>
-                            <Text type='semiBold-body'>
-                                Emissions Breakdown
-                            </Text>
-                            <LineChart
-                                data={formattedCBAM}
-                                lines={emissionLines}
-                            />
-                        </div>
-                    </div>
-                </div>
+                </>
             )}
         </div>
     );

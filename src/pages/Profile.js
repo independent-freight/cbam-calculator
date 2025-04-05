@@ -1,10 +1,27 @@
+import { logoutAsync } from "apis/usersAPI";
+import { APP_SIGNIN_URL } from "assets/appUrls";
 import { Button } from "components/Button";
 import { Text } from "components/Text";
 import { AppHeader } from "layout/AppHeader";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logoutReset } from "state/storeUtils";
 
 export function Profile() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const user = useSelector((state) => state.user);
+
+    const handleLogout = async () => {
+        let response = await logoutAsync();
+        if (response?.error) {
+            alert("Failed to logout. Try again after some time.");
+        } else {
+            dispatch(logoutReset());
+            sessionStorage.clear();
+            navigate(APP_SIGNIN_URL);
+        }
+    };
     return (
         <div className='flex flex-col h-[100%]'>
             <AppHeader header='User Profile' />
@@ -23,8 +40,9 @@ export function Profile() {
                         </Text>
                     </div>
                     <Button
-                        label='Reset Password'
+                        label='Logout'
                         style='w-[180px] mx-[auto]'
+                        onClick={handleLogout}
                     />
                 </div>
             </div>

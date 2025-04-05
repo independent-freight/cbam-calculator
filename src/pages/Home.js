@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppHeader } from "layout/AppHeader";
-import { KPISection } from "./KPISection";
+import { KPISection } from "components/KPISection";
 import { TrendingUp, Factory, Package } from "lucide-react";
 import { getProductKPIAsync } from "apis/productsAPI";
 import { useEffect } from "react";
@@ -9,6 +9,7 @@ import { formatMaterialCategoryName } from "helpers/formatData";
 import { ProductCBAM } from "./ProductCBAM";
 import { Button } from "components/Button";
 import { useNavigate } from "react-router-dom";
+import { PRODUCT_CBAM_URL } from "assets/appUrls";
 
 export function Home() {
     const dispatch = useDispatch();
@@ -27,7 +28,7 @@ export function Home() {
         if (Object.keys(kpi).length <= 0) setupDashboard();
     }, [kpi]);
 
-    const handleViewAll = () => navigate("/product-cbam");
+    const handleViewAll = () => navigate(PRODUCT_CBAM_URL);
 
     return (
         <div className='min-h-[100%] h-[100%]'>

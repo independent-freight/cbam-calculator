@@ -1,4 +1,5 @@
 import { resetPasswordAsync } from "apis/usersAPI";
+import { APP_SIGNIN_URL } from "assets/appUrls";
 import { Button } from "components/Button";
 import { Card } from "components/Card";
 import { Input } from "components/Input";
@@ -28,7 +29,7 @@ export function ResetPassword() {
                         "Password reset email sent! Please check your inbox."
                 );
                 setError("");
-                setTimeout(() => navigate("/sign-in"), 1000);
+                setTimeout(() => navigate(APP_SIGNIN_URL), 1000);
             }
         }
     };
