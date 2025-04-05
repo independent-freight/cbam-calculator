@@ -13,12 +13,14 @@ import { APP_SIGNIN_URL } from "assets/appUrls";
 export function Signup() {
     const [showPassword, setShowPassword] = useState(false);
     const [submitError, setSubmitError] = useState("");
+    const [isSubmitLoading, setSubmitLoading] = useState(false);
 
     const navigate = useNavigate();
 
     const handleShowPassword = () => setShowPassword((prevState) => !prevState);
 
     const handleSubmit = async (values) => {
+        setSubmitLoading(true);
         const response = await registerAsync(values);
         if (response?.user) {
             handleSignin();
@@ -28,6 +30,7 @@ export function Signup() {
                     "Failed to register. Please try again after some time."
             );
         }
+        setSubmitLoading(false);
     };
 
     const handleSignin = () => {
@@ -93,6 +96,7 @@ export function Signup() {
                                 label='Register'
                                 type='submit'
                                 error={submitError}
+                                loading={isSubmitLoading}
                             />
                         </Form>
                     )}

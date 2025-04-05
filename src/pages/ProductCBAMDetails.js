@@ -236,7 +236,7 @@ export function ProductCBAMDetails() {
                                 <div className='flex gap-2'>
                                     {isEmailLoading ? (
                                         <Loader
-                                            className='min-h-[10px]'
+                                            className='!min-h-[10px]'
                                             size={25}
                                         />
                                     ) : (

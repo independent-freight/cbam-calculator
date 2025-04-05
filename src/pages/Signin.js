@@ -17,6 +17,7 @@ import { APP_REGISTER_URL, APP_RESET_PASSWORD_URL } from "assets/appUrls";
 export function Signin() {
     const [showPassword, setShowPassword] = useState(false);
     const [submitError, setSubmitError] = useState("");
+    const [isSubmitLoading, setSubmitLoading] = useState(false);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -24,6 +25,7 @@ export function Signin() {
     const handleShowPassword = () => setShowPassword((prevState) => !prevState);
 
     const handleSubmit = async (values) => {
+        setSubmitLoading(true);
         try {
             const userResults = await signInWithEmailAndPassword(
                 auth,
@@ -49,6 +51,7 @@ export function Signin() {
         } catch (err) {
             setSubmitError(err.message);
         }
+        setSubmitLoading(false);
     };
 
     const handleRegister = () => {
@@ -108,6 +111,7 @@ export function Signin() {
                                 label='Sign in'
                                 type='submit'
                                 error={submitError}
+                                loading={isSubmitLoading}
                             />
                         </Form>
                     )}
