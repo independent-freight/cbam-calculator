@@ -1,4 +1,7 @@
-import { getCBAMDetailsAsync } from "apis/productsAPI";
+import {
+    getCBAMDetailsAsync,
+    removeCBAMCalculationAsync,
+} from "apis/productsAPI";
 import { CBAMGuide } from "components/CBAMGuide";
 import { Loader } from "components/Loader";
 import { Table } from "components/Table";
@@ -19,10 +22,11 @@ import { LineChart } from "components/LineChart";
 import { AppHeader } from "layout/AppHeader";
 import "App.css";
 import html2pdf from "html2pdf.js";
-import { Download, Mail } from "lucide-react";
 import { sendCalculationEmailAsync } from "apis/emailAPI";
 import { PRODUCT_CBAM_URL } from "assets/appUrls";
 import { Button } from "components/Button";
+import { ActionDropdown } from "components/ActionDropdown";
+import { ConfirmationModal } from "components/ConfirmationModal";
 
 export function ProductCBAMDetails() {
     const { id } = useParams();
@@ -35,6 +39,7 @@ export function ProductCBAMDetails() {
     const [isLoading, setLoading] = useState(false);
     const [isEmailLoading, setEmailLoading] = useState(false);
     const [emptyState, setEmptyState] = useState("");
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
     const setupCBAMDetails = async (id) => {
         let response = await getCBAMDetailsAsync(id);
@@ -192,6 +197,15 @@ export function ProductCBAMDetails() {
         }
         setEmailLoading(false);
     };
+    const handleRemoveCalculation = async () => {
+        let response = await removeCBAMCalculationAsync(id);
+        if (!response?.error) handleGoBack();
+        else {
+            alert(
+                "Failed to remove the calculation. Please try again after some time."
+            );
+        }
+    };
     return (
         <div
             className={
@@ -240,23 +254,40 @@ export function ProductCBAMDetails() {
                                             size={25}
                                         />
                                     ) : (
-                                        <>
-                                            <Mail
-                                                size={26}
-                                                onClick={
-                                                    !isEmailLoading &&
-                                                    sendCalculationEmail
-                                                }
-                                            />
-
-                                            <Download
-                                                size={25}
-                                                onClick={handleDownload}
-                                            />
-                                        </>
+                                        <ActionDropdown
+                                            options={[
+                                                {
+                                                    label: "Send mail",
+                                                    onClick:
+                                                        !isEmailLoading &&
+                                                        sendCalculationEmail,
+                                                },
+                                                {
+                                                    label: "Download Report",
+                                                    onClick: handleDownload,
+                                                },
+                                                {
+                                                    label: "Remove Calculation",
+                                                    onClick: () =>
+                                                        setShowConfirmation(
+                                                            true
+                                                        ),
+                                                    labelType: "error-label",
+                                                },
+                                            ]}
+                                        />
                                     )}
                                 </div>
                             </div>
+                            <ConfirmationModal
+                                isOpen={showConfirmation}
+                                onClose={() => setShowConfirmation(false)}
+                                onConfirm={handleRemoveCalculation}
+                                title={"Confirm Remove Calculation"}
+                                message={
+                                    "Are you sure you wish to remove the calculation?"
+                                }
+                            />
                             <div className='w-full xs-max-w-md ssm-max-w-md sm:max-w-md md:max-w-lg lg:max-w-2xl xl:max-w-4xl my-[40px] mx-auto'>
                                 <div id='download-pdf'>
                                     <Table
