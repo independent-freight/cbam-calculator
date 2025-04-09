@@ -1,43 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form, FieldArray } from "formik";
 import { Button } from "components/Button"; // Using shadcn/ui for styling
-import { Card } from "./Card";
 import { Input } from "./Input";
 import { Dropdown } from "./Dropdown";
-import { ArrowLeft } from "lucide-react";
-import { Text } from "./Text";
 
 export function WizardForm({
-    formSteps,
-    onSubmit,
+    formData,
     initialValues,
-    customStep = 0,
     onFieldArrayPush,
     onFieldArrayRemove,
+    validation,
+    onSubmit = () => {},
+    isFieldArray = false,
+    formName = "",
+    dataTemplate = {},
+    formikRef,
 }) {
-    const [allFormData, setAllFormData] = useState({ ...initialValues });
-    const [step, setStep] = useState(customStep);
-    const isLastStep = step === formSteps.length - 1;
-
-    const handleNext = (values, { setTouched }) => {
-        setAllFormData((prevState) => ({ ...prevState, ...values }));
-        setTouched({});
-        setStep(step + 1);
-    };
-
+    const [fieldData, setFieldData] = useState({ ...initialValues });
     useEffect(() => {
-        setAllFormData((prevState) => ({ ...prevState, ...initialValues }));
+        setFieldData((prevState) => ({ ...prevState, ...initialValues }));
     }, [initialValues]);
 
-    const handlePrev = () => {
-        setStep(step - 1);
-    };
-
     const handleSubmit = (values) => {
-        onSubmit({ ...allFormData, ...values });
+        onSubmit({ ...fieldData, ...values });
     };
 
-    const renderAddRemove = (index, remove, push, template) => {
+    const renderAddRemove = (index, remove, push) => {
         return (
             <div className='flex justify-between items-center'>
                 {/* Remove Button */}
@@ -47,11 +35,7 @@ export function WizardForm({
                         className='text-white-500'
                         onClick={() => {
                             remove(index);
-                            onFieldArrayRemove &&
-                                onFieldArrayRemove(
-                                    index,
-                                    formSteps[step]?.name
-                                );
+                            onFieldArrayRemove && onFieldArrayRemove(index);
                         }}
                         label='Remove'
                     />
@@ -60,18 +44,13 @@ export function WizardForm({
                 <Button
                     type='button'
                     onClick={() => {
-                        push(
-                            template ?? initialValues[formSteps[step]?.name][0]
-                        );
+                        push(dataTemplate ?? initialValues[0]);
                         onFieldArrayPush &&
-                            onFieldArrayPush(
-                                template ??
-                                    initialValues[formSteps[step]?.name][0],
-                                formSteps[step]?.name
-                            );
+                            onFieldArrayPush(dataTemplate ?? initialValues[0]);
                     }}
                     className='text-white-500'
-                    label='Add'></Button>
+                    label='Add'
+                />
             </div>
         );
     };
@@ -83,19 +62,20 @@ export function WizardForm({
         errors,
         handleChange,
         setFieldValue,
-        prefixName
+        prefix
     ) => {
         return fields.map(
             (
                 { componentType = "input", name, label, setField, ...props },
                 field_index
             ) => {
-                let fieldName = `${
-                    prefixName === 0 || prefixName ? `${prefixName}.` : ""
-                }${name}`;
+                let fieldName =
+                    prefix === 0 || prefix
+                        ? `${formName}[${prefix}][${name}]`
+                        : name;
                 return (
                     <div
-                        key={`${field_index}-${fieldName}-${name}`}
+                        key={`${field_index}-${name}-${fieldName}`}
                         className='mb-4'>
                         {componentType === "input" ? (
                             <Input
@@ -107,7 +87,7 @@ export function WizardForm({
                                         setField(
                                             e.target.value,
                                             fieldName,
-                                            allFormData
+                                            fieldData
                                         );
                                     handleChange(e);
                                 }}
@@ -122,11 +102,7 @@ export function WizardForm({
                                 value={values?.[name] ?? null}
                                 onSelect={(option) => {
                                     setField &&
-                                        setField(
-                                            option,
-                                            fieldName,
-                                            allFormData
-                                        );
+                                        setField(option, fieldName, fieldData);
                                     setFieldValue(fieldName, option);
                                 }}
                                 error={touched?.[name] && errors?.[name]}
@@ -140,96 +116,53 @@ export function WizardForm({
     };
 
     return (
-        <Card className='max-w-md mx-auto'>
-            <div className='mb-4 flex items-center justify-between'>
-                {step > 0 && <ArrowLeft onClick={handlePrev} />}
-                <Text type='semiBold-subHeader' className='text-center flex-1'>
-                    {formSteps[step].title}
-                </Text>
-            </div>
-
+        <div>
             <Formik
-                initialValues={allFormData}
-                enableReinitialize={true}
-                validationSchema={formSteps[step].validationSchema}
-                onSubmit={isLastStep ? handleSubmit : handleNext}>
-                {({
-                    isValid,
-                    values,
-                    touched,
-                    errors,
-                    handleChange,
-                    setFieldValue,
-                }) => (
+                innerRef={formikRef}
+                initialValues={fieldData}
+                validationSchema={validation}
+                onSubmit={handleSubmit}
+                enableReinitialize={true}>
+                {({ values, touched, errors, handleChange, setFieldValue }) => (
                     <Form>
-                        {formSteps[step]?.componentType === "fieldArray" ? (
-                            <FieldArray name={formSteps[step]?.name}>
-                                {({ push, remove }) =>
-                                    values[formSteps[step]?.name]?.map(
-                                        (_, index) => {
-                                            let fieldErrors =
-                                                errors?.[
-                                                    formSteps[step]?.name
-                                                ]?.[index];
-                                            let fieldValues =
-                                                values?.[
-                                                    formSteps[step]?.name
-                                                ]?.[index];
-                                            let fieldTouched =
-                                                touched?.[
-                                                    formSteps[step]?.name
-                                                ]?.[index];
-                                            return (
-                                                <>
-                                                    {fieldRender(
-                                                        formSteps[step].fields,
-                                                        fieldValues,
-                                                        fieldTouched,
-                                                        fieldErrors,
-                                                        handleChange,
-                                                        setFieldValue,
-                                                        `${formSteps[step]?.name}[${index}]`
-                                                    )}
-                                                    {renderAddRemove(
-                                                        index,
-                                                        remove,
-                                                        push,
-                                                        formSteps[step]
-                                                            ?.template ?? null
-                                                    )}
-                                                </>
-                                            );
-                                        }
-                                    )
-                                }
+                        {isFieldArray ? (
+                            <FieldArray name={formName}>
+                                {({ push, remove }) => {
+                                    return values[formName]?.map((_, index) => {
+                                        return (
+                                            <>
+                                                {fieldRender(
+                                                    formData,
+                                                    values[formName]?.[index],
+                                                    touched[formName]?.[index],
+                                                    errors[formName]?.[index],
+                                                    handleChange,
+                                                    setFieldValue,
+                                                    index
+                                                )}
+                                                {renderAddRemove(
+                                                    index,
+                                                    remove,
+                                                    push
+                                                )}
+                                            </>
+                                        );
+                                    });
+                                }}
                             </FieldArray>
                         ) : (
                             fieldRender(
-                                formSteps[step].fields,
-                                values?.[formSteps[step]?.name],
-                                touched?.[formSteps[step]?.name],
-                                errors?.[formSteps[step]?.name],
+                                formData,
+                                values,
+                                touched,
+                                errors,
                                 handleChange,
-                                setFieldValue,
-                                formSteps[step]?.name
+                                setFieldValue
                             )
                         )}
-                        <div className='flex justify-between mt-4'>
-                            <Button
-                                error={
-                                    typeof errors[formSteps[step]?.name] ===
-                                        "string" &&
-                                    errors[formSteps[step]?.name]
-                                }
-                                className='w-screen'
-                                type='submit'
-                                disabled={!isValid}
-                                label={isLastStep ? "Submit" : "Next"}
-                            />
-                        </div>
                     </Form>
                 )}
             </Formik>
-        </Card>
+        </div>
     );
 }

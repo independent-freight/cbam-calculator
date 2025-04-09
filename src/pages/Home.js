@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppHeader } from "layout/AppHeader";
-import { KPISection } from "components/KPISection";
+import { KPISection } from "components/pages/Home/KPISection";
 import { TrendingUp, Factory, Package } from "lucide-react";
 import { getProductKPIAsync } from "apis/productsAPI";
 import { useEffect } from "react";

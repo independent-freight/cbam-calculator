@@ -9,6 +9,7 @@ import {
     errorHandler,
     getApiCall,
     postApiCall,
+    putApiCall,
 } from "./apiCalls";
 
 export const getProductCBAMListAsync = async (page = 1, limit = 5) => {
@@ -105,5 +106,24 @@ export const removeCBAMCalculationAsync = async (id) => {
         }
     } catch (error) {
         return errorHandler(error, "GET KPI Details");
+    }
+};
+
+export const updateCBAMCalculation = async (data, id) => {
+    try {
+        let response = await putApiCall(cbamDetailsUrl(id), { ...data });
+        if (response?.data) {
+            return {
+                message: "Sucessfully updated CBAM calculation.",
+                data: response?.data,
+            };
+        } else {
+            return {
+                error: response?.data?.message ?? "Something went wrong!",
+                code: response?.data?.code ?? "UI_ERROR",
+            };
+        }
+    } catch (error) {
+        return errorHandler(error, "CALCULATE Product CBAM list");
     }
 };

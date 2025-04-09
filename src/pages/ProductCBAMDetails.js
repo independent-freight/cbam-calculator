@@ -2,7 +2,7 @@ import {
     getCBAMDetailsAsync,
     removeCBAMCalculationAsync,
 } from "apis/productsAPI";
-import { CBAMGuide } from "components/CBAMGuide";
+import { CBAMGuide } from "components/pages/CBAMCalculation/CBAMGuide";
 import { Loader } from "components/Loader";
 import { Table } from "components/Table";
 import { Text } from "components/Text";
@@ -23,7 +23,10 @@ import { AppHeader } from "layout/AppHeader";
 import "App.css";
 import html2pdf from "html2pdf.js";
 import { sendCalculationEmailAsync } from "apis/emailAPI";
-import { PRODUCT_CBAM_URL } from "assets/appUrls";
+import {
+    PRODUCT_CBAM_URL,
+    UPDATE_CALCULATE_PRODUCT_CBAM_URL,
+} from "assets/appUrls";
 import { Button } from "components/Button";
 import { ActionDropdown } from "components/ActionDropdown";
 import { ConfirmationModal } from "components/ConfirmationModal";
@@ -206,6 +209,12 @@ export function ProductCBAMDetails() {
             );
         }
     };
+
+    const handleUpdateCalculation = () => {
+        navigate(UPDATE_CALCULATE_PRODUCT_CBAM_URL, {
+            state: { cbamDetails },
+        });
+    };
     return (
         <div
             className={
@@ -265,6 +274,11 @@ export function ProductCBAMDetails() {
                                                 {
                                                     label: "Download Report",
                                                     onClick: handleDownload,
+                                                },
+                                                {
+                                                    label: "Update Calculation",
+                                                    onClick:
+                                                        handleUpdateCalculation,
                                                 },
                                                 {
                                                     label: "Remove Calculation",

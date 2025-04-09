@@ -5,5 +5,8 @@ import productCBAM from "state/productCBAMSlice";
 
 export const store = configureStore({
     reducer: { user: user, productCBAM: productCBAM },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger), // Add logger as middleware
+    middleware: (getDefaultMiddleware) =>
+        process.env?.REACT_APP_DEV === "dev"
+            ? getDefaultMiddleware().concat(logger)
+            : null, // Add logger as middleware
 });
