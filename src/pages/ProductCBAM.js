@@ -1,11 +1,19 @@
-import { getProductCBAMListAsync } from "apis/productsAPI";
+import { sendCalculationEmailAsync } from "apis/emailAPI";
+import {
+    getProductCBAMListAsync,
+    removeCBAMCalculationAsync,
+} from "apis/productsAPI";
 import { CALCULATE_PRODUCT_CBAM_URL, PRODUCT_CBAM_URL } from "assets/appUrls";
+import { ActionDropdown } from "components/ActionDropdown";
 import { Button } from "components/Button";
 import { Card } from "components/Card";
+import { ConfirmationModal } from "components/ConfirmationModal";
 import { Loader } from "components/Loader";
 import { Pagination } from "components/Pagination";
 import { Text } from "components/Text";
 import {
+    formatCBAMDetails,
+    formatEmailCalculations,
     formatMaterialCategoryName,
     formatNumber,
     formatProductName,
@@ -34,6 +42,8 @@ export function ProductCBAM({
     const [isProductLoading, setProductLoading] = useState(
         products?.length <= 0
     );
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [isEmailLoading, setEmailLoading] = useState(false);
     const setUpProductCBAM = async (page, limit) => {
         let response = await getProductCBAMListAsync(page, limit);
         if (response?.data) dispatch(setProductCBAM(response?.data));
@@ -172,6 +182,46 @@ export function ProductCBAM({
         dispatch(updateCBAMDetails({ id: data?._id, data }));
         navigate(`${PRODUCT_CBAM_URL}/${data?._id}`, { state: data });
     };
+    const sendCalculationEmail = async (cbamDetails) => {
+        setEmailLoading(true);
+        let response = await sendCalculationEmailAsync(
+            {
+                description: `${
+                    cbamDetails?.production_process?.product_cn_code
+                } - ${formatProductName(
+                    cbamDetails?.production_process?.material_category,
+                    cbamDetails?.production_process?.product_cn_code
+                )}`,
+            },
+            formatEmailCalculations(
+                formatCBAMDetails(
+                    cbamDetails?.results,
+                    cbamDetails?.production_process?.material_category,
+                    cbamDetails?.production_process?.electricity_source
+                )
+            )
+        );
+        if (response?.error)
+            alert(
+                "Failed to send the calculation summary to your email. Please try again after some time."
+            );
+        else {
+            alert(
+                "Successfully send the summary of the calculations to your email. Please check your email. "
+            );
+        }
+        setEmailLoading(false);
+    };
+    const handleRemoveCalculation = async (id) => {
+        let response = await removeCBAMCalculationAsync(id);
+        if (!response?.error)
+            setUpProductCBAM(pagination?.page, pagination?.limit);
+        else {
+            alert(
+                "Failed to remove the calculation. Please try again after some time."
+            );
+        }
+    };
     return (
         <div className={`w-full flex flex-col`}>
             <AppHeader
@@ -232,7 +282,37 @@ export function ProductCBAM({
                                         }
                                     )}
                                 </div>
-                                <ChevronRight size={30} />
+                                <ActionDropdown
+                                    options={[
+                                        {
+                                            label: "Send mail",
+                                            onClick: () =>
+                                                !isEmailLoading &&
+                                                sendCalculationEmail(item),
+                                        },
+                                        {
+                                            label: "Remove Calculation",
+                                            onClick: () =>
+                                                setShowConfirmation(true),
+                                            labelType: "error-label",
+                                        },
+                                    ]}
+                                />
+                                <ConfirmationModal
+                                    isOpen={showConfirmation}
+                                    onClose={(e) => {
+                                        e.stopPropagation();
+                                        setShowConfirmation(false);
+                                    }}
+                                    onConfirm={(e) => {
+                                        e.stopPropagation();
+                                        handleRemoveCalculation(item?._id);
+                                    }}
+                                    title={"Confirm Remove Calculation"}
+                                    message={
+                                        "Are you sure you wish to remove the calculation?"
+                                    }
+                                />
                             </Card>
                         );
                     })

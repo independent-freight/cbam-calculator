@@ -4,7 +4,12 @@ import {
     cbamDetailsUrl,
     CBAM_KPI_URL,
 } from "assets/apis";
-import { errorHandler, getApiCall, postApiCall } from "./apiCalls";
+import {
+    deleteApiCall,
+    errorHandler,
+    getApiCall,
+    postApiCall,
+} from "./apiCalls";
 
 export const getProductCBAMListAsync = async (page = 1, limit = 5) => {
     try {
@@ -71,6 +76,25 @@ export const getProductKPIAsync = async () => {
         if (response?.data) {
             return {
                 message: "Sucessfully fetched KPI data.",
+                data: response?.data,
+            };
+        } else {
+            return {
+                error: response?.data?.message ?? "Something went wrong!",
+                code: response?.data?.code ?? "UI_ERROR",
+            };
+        }
+    } catch (error) {
+        return errorHandler(error, "GET KPI Details");
+    }
+};
+
+export const removeCBAMCalculationAsync = async (id) => {
+    try {
+        let response = await deleteApiCall(cbamDetailsUrl(id));
+        if (response?.data) {
+            return {
+                message: "Sucessfully removed CBAM calculation.",
                 data: response?.data,
             };
         } else {
