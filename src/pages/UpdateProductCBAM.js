@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { CBAMSummary } from "components/pages/CBAMCalculation/CBAMSummary";
-import { calculateProductCBAMAsync } from "apis/productsAPI";
+import { updateCBAMCalculation } from "apis/productsAPI";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AppHeader } from "layout/AppHeader";
 import { PRODUCT_CBAM_URL } from "assets/appUrls";
@@ -14,18 +14,22 @@ import {
     addSupplierTemplate,
     cbamSummaryKeys,
 } from "assets/formTemplates";
+import { useDispatch } from "react-redux";
+import { updateCBAMDetails } from "state/productCBAMSlice";
 
-export function AddProductCBAM() {
+export function UpdateProductCBAM() {
+    const dispatch = useDispatch();
     const productRef = useRef();
     const subcontractorRef = useRef();
     const supplierRef = useRef();
     const navigate = useNavigate();
     const { state } = useLocation();
+    const { cbamDetails, from = null } = state;
     const [submitError, setSubmitError] = useState("");
     const [cbamFormData, setCBAMFormData] = useState({
-        production_process: { ...addProductionProcessTemplate },
-        subcontractors: [{ ...addSubcontractorsTemplate }],
-        suppliers: [{ ...addSupplierTemplate }],
+        production_process: { ...cbamDetails?.production_process },
+        subcontractors: [...cbamDetails?.subcontractors],
+        suppliers: [...cbamDetails?.suppliers],
     });
 
     const handleFormSubmit = async (stepName, formRef) => {
@@ -50,17 +54,23 @@ export function AddProductCBAM() {
         }
     };
     const handleAddProduct = async (formData) => {
-        let response = await calculateProductCBAMAsync(formData);
+        let response = await updateCBAMCalculation(formData, cbamDetails?._id);
         if (response?.error) {
             setSubmitError(
-                "Failed to calculate Product's CBAM. Please try again after some time."
+                "Failed to update Product's CBAM calculation. Please try again after some time."
             );
         } else {
-            navigate(`${PRODUCT_CBAM_URL}/${response?._id}`);
+            dispatch(
+                updateCBAMDetails({
+                    id: cbamDetails?._id,
+                    data: response?.data,
+                })
+            );
+            navigate(`${PRODUCT_CBAM_URL}/${cbamDetails?._id}`);
         }
     };
 
-    const handleExit = () => navigate(state?.from ?? PRODUCT_CBAM_URL);
+    const handleExit = () => navigate(from ?? PRODUCT_CBAM_URL);
     const productCBAMSteps = [
         {
             title: "Production Process",
@@ -102,12 +112,7 @@ export function AddProductCBAM() {
         {
             title: "Product CBAM Summary",
             children: (
-                <CBAMSummary
-                    data={cbamFormData}
-                    cbamKeys={cbamSummaryKeys}
-                    onSubmit={handleAddProduct}
-                    error={submitError}
-                />
+                <CBAMSummary data={cbamFormData} cbamKeys={cbamSummaryKeys} />
             ),
 
             onSubmit: () => handleFormSubmit("cbam_summary"),
@@ -117,12 +122,12 @@ export function AddProductCBAM() {
     return (
         <div>
             <AppHeader
-                header='Calculate Product CBAM'
+                header='Update Product CBAM Calculation'
                 showBack
                 onBackClick={handleExit}
             />
             <div className='max-w-full m-[auto]'>
-                <Wizard steps={productCBAMSteps} />
+                <Wizard steps={productCBAMSteps} submitError={submitError} />
             </div>
         </div>
     );

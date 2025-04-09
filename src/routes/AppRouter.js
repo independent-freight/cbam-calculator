@@ -16,7 +16,9 @@ import {
     APP_SIGNIN_URL,
     CALCULATE_PRODUCT_CBAM_URL,
     PRODUCT_CBAM_URL,
+    UPDATE_CALCULATE_PRODUCT_CBAM_URL,
 } from "assets/appUrls";
+import { UpdateProductCBAM } from "pages/UpdateProductCBAM";
 
 export function AppRouter({ loggedIn, onLogout }) {
     return (
@@ -33,6 +35,10 @@ export function AppRouter({ loggedIn, onLogout }) {
                         <Route
                             path={CALCULATE_PRODUCT_CBAM_URL}
                             element={<AddProductCBAM />}
+                        />
+                        <Route
+                            path={UPDATE_CALCULATE_PRODUCT_CBAM_URL}
+                            element={<UpdateProductCBAM />}
                         />
                         <Route
                             path={`${PRODUCT_CBAM_URL}/:id`}

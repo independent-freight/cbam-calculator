@@ -5,6 +5,8 @@ export const APP_HOME_URL = "/";
 export const APP_SIGNIN_URL = "/sign-in";
 export const APP_RESET_PASSWORD_URL = "/reset-password";
 export const APP_PROFILE_URL = "/profile";
+export const UPDATE_CALCULATE_PRODUCT_CBAM_URL =
+    "/product-cbam/update-calculation";
 export const protectedRoutes = [
     PRODUCT_CBAM_URL,
     CALCULATE_PRODUCT_CBAM_URL,

@@ -3,7 +3,12 @@ import {
     getProductCBAMListAsync,
     removeCBAMCalculationAsync,
 } from "apis/productsAPI";
-import { CALCULATE_PRODUCT_CBAM_URL, PRODUCT_CBAM_URL } from "assets/appUrls";
+import {
+    APP_HOME_URL,
+    CALCULATE_PRODUCT_CBAM_URL,
+    PRODUCT_CBAM_URL,
+    UPDATE_CALCULATE_PRODUCT_CBAM_URL,
+} from "assets/appUrls";
 import { ActionDropdown } from "components/ActionDropdown";
 import { Button } from "components/Button";
 import { Card } from "components/Card";
@@ -19,7 +24,7 @@ import {
     formatProductName,
 } from "helpers/formatData";
 import { AppHeader } from "layout/AppHeader";
-import { Calculator, ChevronRight, Plus, PlusCircle } from "lucide-react";
+import { Calculator, Plus } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -222,6 +227,11 @@ export function ProductCBAM({
             );
         }
     };
+    const handleUpdateCalculation = (item) => {
+        navigate(UPDATE_CALCULATE_PRODUCT_CBAM_URL, {
+            state: { from: APP_HOME_URL, cbamDetails: item },
+        });
+    };
     return (
         <div className={`w-full flex flex-col`}>
             <AppHeader
@@ -289,6 +299,11 @@ export function ProductCBAM({
                                             onClick: () =>
                                                 !isEmailLoading &&
                                                 sendCalculationEmail(item),
+                                        },
+                                        {
+                                            label: "Update Calculation",
+                                            onClick: () =>
+                                                handleUpdateCalculation(item),
                                         },
                                         {
                                             label: "Remove Calculation",

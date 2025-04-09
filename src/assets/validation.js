@@ -19,26 +19,18 @@ export const loginSchema = Yup.object().shape({
 });
 
 export const productionSchema = Yup.object({
-    production_process: Yup.object({
-        annual_production: Yup.number().required(
-            "Annual Production is required"
-        ),
-        material_yield: Yup.number().required("Material Yield is required"),
-        energy_used: Yup.number("Energy used must be a number.")
-            .required("Energy used is required")
-            .min(1),
-        material_category: Yup.string().required(
-            "Material Category is required"
-        ),
-        fuel_type: Yup.string().required("Fuel type used is require"),
-        product_cn_code: Yup.string().required("Product CN Code is required"),
-        electricity_used: Yup.number().required(
-            "Electricity used is required."
-        ),
-        electricity_used: Yup.string().required(
-            "Electricity source is required."
-        ),
-    }),
+    annual_production: Yup.number().required("Annual Production is required"),
+    material_yield: Yup.number().required("Material Yield is required"),
+    energy_used: Yup.number("Energy used must be a number.")
+        .required("Energy used is required")
+        .min(1),
+    material_category: Yup.string().required("Material Category is required"),
+    fuel_type: Yup.string().required("Fuel type used is require"),
+    product_cn_code: Yup.string().required("Product CN Code is required"),
+    electricity_used: Yup.number().required("Electricity used is required."),
+    electricity_source: Yup.string().required(
+        "Electricity source is required."
+    ),
 });
 
 export const subcontractorSchema = Yup.object({
@@ -87,26 +79,23 @@ export const subcontractorSchema = Yup.object({
     ),
 });
 
-export const supplierSchema = () =>
-    Yup.object({
-        suppliers: Yup.array().of(
-            Yup.object().shape({
-                name: Yup.string().required("Name of supplier is required."),
-                country_code: Yup.string().required(
-                    "Country of supplier is required"
-                ),
-                material_type: Yup.string().required(
-                    "Material type is required."
-                ),
-                quantity: Yup.number("Quantity needs to be a number").required(
-                    "Quantity is required"
-                ),
-                indirect_emissions: Yup.number(
-                    "Indirect Emissions need to be a number"
-                ).required("Indirect Emissions is required"),
-                direct_emissions: Yup.number(
-                    "Direct Emissions need to be a number"
-                ).required("Direct Emissions is required"),
-            })
-        ),
-    });
+export const supplierSchema = Yup.object({
+    suppliers: Yup.array().of(
+        Yup.object().shape({
+            name: Yup.string().required("Name of supplier is required."),
+            country_code: Yup.string().required(
+                "Country of supplier is required"
+            ),
+            material_type: Yup.string().required("Material type is required."),
+            quantity: Yup.number("Quantity needs to be a number").required(
+                "Quantity is required"
+            ),
+            indirect_emissions: Yup.number(
+                "Indirect Emissions need to be a number"
+            ).required("Indirect Emissions is required"),
+            direct_emissions: Yup.number(
+                "Direct Emissions need to be a number"
+            ).required("Direct Emissions is required"),
+        })
+    ),
+});
