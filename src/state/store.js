@@ -8,5 +8,5 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         process.env?.REACT_APP_DEV === "dev"
             ? getDefaultMiddleware().concat(logger)
-            : null, // Add logger as middleware
+            : [], // Add logger as middleware
 });
