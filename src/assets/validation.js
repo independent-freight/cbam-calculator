@@ -56,8 +56,10 @@ export const subcontractorSchema = Yup.object({
                     "Direct Emissions is required",
                     function (value) {
                         const { name, indirect_emissions } = this.parent;
-                        return value || name || indirect_emissions
-                            ? !!value
+                        const isValueProvided =
+                            value !== null && value !== undefined;
+                        return name || indirect_emissions !== null
+                            ? isValueProvided
                             : true;
                     }
                 ),
@@ -70,8 +72,10 @@ export const subcontractorSchema = Yup.object({
                     "Indirect Emissions is required",
                     function (value) {
                         const { name, direct_emissions } = this.parent;
-                        return value || name || direct_emissions
-                            ? !!value
+                        const isValueProvided =
+                            value !== null && value !== undefined;
+                        return name || direct_emissions !== null
+                            ? isValueProvided
                             : true;
                     }
                 ),
