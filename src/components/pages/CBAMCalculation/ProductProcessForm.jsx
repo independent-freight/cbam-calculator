@@ -52,6 +52,8 @@ export function ProductProcessForm({ initialValues, formikRef }) {
         {
             name: "energy_used",
             label: "Energy Used (tonnes/year)",
+            tooltip:
+                "Total amount of energy used to manufacture goods over the year",
             type: "number",
             placeholder: "Energy used in tonnes",
         },
@@ -64,9 +66,11 @@ export function ProductProcessForm({ initialValues, formikRef }) {
         },
         {
             name: "electricity_used",
-            label: "Electricity Used (kWh/year)",
+            label: "Electricity Used (MWh/year)",
+            tooltip:
+                "Total amount of electricity used to manufacture goods over the year",
             type: "number",
-            placeholder: "Electricity used in kWh",
+            placeholder: "Electricity used in MWh",
         },
     ];
     return (

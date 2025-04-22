@@ -66,7 +66,14 @@ export function WizardForm({
     ) => {
         return fields.map(
             (
-                { componentType = "input", name, label, setField, ...props },
+                {
+                    componentType = "input",
+                    name,
+                    label,
+                    setField,
+                    tooltip,
+                    ...props
+                },
                 field_index
             ) => {
                 let fieldName =
@@ -82,6 +89,7 @@ export function WizardForm({
                                 value={values?.[name]}
                                 label={label}
                                 name={fieldName}
+                                tooltip={tooltip}
                                 onChange={(e) => {
                                     setField &&
                                         setField(
