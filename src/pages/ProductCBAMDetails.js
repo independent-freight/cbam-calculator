@@ -94,6 +94,7 @@ export function ProductCBAMDetails() {
         return Object.values(subData).map((info, key) => ({
             label: info,
             colSpan: key === 0 ? 2 : 1,
+            style: "font-semibold",
         }));
     };
 
@@ -120,8 +121,9 @@ export function ProductCBAMDetails() {
             },
             { label: "Country Code", key: "country_code" },
         ],
-        [...getCBAMTableSubHeader(cbamDetails?.results)],
     ];
+
+    const footerCols = [[...getCBAMTableSubHeader(cbamDetails?.results)]];
 
     useEffect(() => {
         setLoading(true);
@@ -307,6 +309,7 @@ export function ProductCBAMDetails() {
                                     <Table
                                         data={formattedCBAM}
                                         columns={columns}
+                                        footerCols={footerCols}
                                     />
                                     <CBAMGuide />
                                 </div>
