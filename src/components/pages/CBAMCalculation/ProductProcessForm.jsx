@@ -32,15 +32,10 @@ export function ProductProcessForm({ initialValues, formikRef }) {
         },
         {
             name: "annual_production",
-            label: "Annual Production (tonnes)",
+            label: "Annual Market Production (tonnes/year)",
             type: "number",
-            placeholder: "Annual production in tonnes",
-        },
-        {
-            name: "material_yield",
-            label: "Material Yield (%)",
-            type: "number",
-            placeholder: "Material yield in percentage",
+            placeholder: "Annual Market Production (tonnes/year)",
+            tooltip: "Total annual production output for the market in tonnes.",
         },
         {
             name: "fuel_type",

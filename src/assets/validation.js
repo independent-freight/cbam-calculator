@@ -19,8 +19,9 @@ export const loginSchema = Yup.object().shape({
 });
 
 export const productionSchema = Yup.object({
-    annual_production: Yup.number().required("Annual Production is required"),
-    material_yield: Yup.number().required("Material Yield is required"),
+    annual_production: Yup.number().required(
+        "Annual Market Production is required"
+    ),
     energy_used: Yup.number("Energy used must be a number.")
         .required("Energy used is required")
         .min(1),
