@@ -10,6 +10,7 @@ import {
     formatCBAMDetails,
     formatEmailCalculations,
     formatNumber,
+    formatNumberToString,
     formatProductName,
 } from "helpers/formatData";
 import { useEffect, useMemo, useState } from "react";
@@ -92,7 +93,7 @@ export function ProductCBAMDetails() {
             }
         );
         return Object.values(subData).map((info, key) => ({
-            label: info,
+            label: typeof info === "number" ? formatNumberToString(info) : info,
             colSpan: key === 0 ? 2 : 1,
             style: "font-semibold",
         }));
