@@ -32,15 +32,10 @@ export function ProductProcessForm({ initialValues, formikRef }) {
         },
         {
             name: "annual_production",
-            label: "Annual Production (tonnes)",
+            label: "Annual Market Production (tonnes/year)",
             type: "number",
-            placeholder: "Annual production in tonnes",
-        },
-        {
-            name: "material_yield",
-            label: "Material Yield (%)",
-            type: "number",
-            placeholder: "Material yield in percentage",
+            placeholder: "Annual Market Production (tonnes/year)",
+            tooltip: "Total annual production output for the market in tonnes.",
         },
         {
             name: "fuel_type",
@@ -52,6 +47,8 @@ export function ProductProcessForm({ initialValues, formikRef }) {
         {
             name: "energy_used",
             label: "Energy Used (tonnes/year)",
+            tooltip:
+                "Total amount of energy used to manufacture goods over the year",
             type: "number",
             placeholder: "Energy used in tonnes",
         },
@@ -64,9 +61,11 @@ export function ProductProcessForm({ initialValues, formikRef }) {
         },
         {
             name: "electricity_used",
-            label: "Electricity Used (kWh/year)",
+            label: "Electricity Used (MWh/year)",
+            tooltip:
+                "Total amount of electricity used to manufacture goods over the year",
             type: "number",
-            placeholder: "Electricity used in kWh",
+            placeholder: "Electricity used in MWh",
         },
     ];
     return (

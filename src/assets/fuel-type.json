@@ -1,4 +1,5 @@
 [
+    { "value": "Natural gas", "label": "Natural gas" },
     { "value": "Crude oil", "label": "Crude oil" },
     { "value": "Orimulsion", "label": "Orimulsion" },
     { "value": "Natural gas liquids", "label": "Natural gas liquids" },

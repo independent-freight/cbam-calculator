@@ -1,6 +1,6 @@
 import React from "react";
 import "App.css";
-export function Table({ data = [], columns, className }) {
+export function Table({ data = [], columns, className, footerCols }) {
     const columnKeys = columns[0].map((col) => col.key).filter(Boolean);
 
     return (
@@ -52,6 +52,24 @@ export function Table({ data = [], columns, className }) {
                                     </td>
                                 );
                             })}
+                        </tr>
+                    ))}
+                    {footerCols.map((footerRow, rIndex) => (
+                        <tr key={rIndex} className='bg-gray-200'>
+                            {footerRow.map(
+                                ({ label, colSpan, key, style }, cIndex) => (
+                                    <td
+                                        key={`${rIndex}-${cIndex}-${
+                                            key ?? "-"
+                                        }`}
+                                        colSpan={colSpan || 1}
+                                        className={`border border-gray-300 px-4 py-2 text-center ${
+                                            style ?? ""
+                                        }`}>
+                                        {label}
+                                    </td>
+                                )
+                            )}
                         </tr>
                     ))}
                 </tbody>

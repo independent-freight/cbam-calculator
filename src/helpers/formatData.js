@@ -12,6 +12,11 @@ export const formatMaterialCategoryName = (key) => {
     );
     return prdMaterial?.extra_label ?? prdMaterial?.label;
 };
+export const formatNumber = (number, limit) =>
+    Number(Number(number).toFixed(limit ?? 3));
+
+export const formatNumberToString = (number) =>
+    Number(number).toLocaleString("en-GB");
 
 export const formatProductName = (category, code) =>
     commodityCodes[category]?.find((item) => item?.code === code)?.description;
@@ -25,14 +30,15 @@ export const formatCBAMDetails = (
     let productName = (code) => formatProductName(material_category, code);
     return data.map((item, index) => ({
         ...item,
+        emb_em_total: formatNumberToString(item?.emb_em_total),
+        emb_em_indirect: formatNumberToString(item?.emb_em_indirect),
+        emb_em_direct: formatNumberToString(item?.emb_em_direct),
         name: item?.is_supplier ? item?.name : productName(item?.name),
         product_material: product_material ?? "-",
         electricity_source:
             index === 0 && electricity_source ? electricity_source : "Mix",
     }));
 };
-export const formatNumber = (number, limit) =>
-    Number(Number(number).toFixed(limit ?? 3));
 
 export const formatEmailCalculations = (data) => {
     return data.reduce(

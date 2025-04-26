@@ -20,7 +20,7 @@ export function CBAMSummary({ data, cbamKeys }) {
                     <Text type='label-semiBold' className='mr-[5px]'>
                         {cbamKeys[key]}:
                     </Text>
-                    <Text type='label'> {value || "N/A"}</Text>
+                    <Text type='label'> {value ?? "N/A"}</Text>
                 </div>
             );
         });

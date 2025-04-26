@@ -19,8 +19,9 @@ export const loginSchema = Yup.object().shape({
 });
 
 export const productionSchema = Yup.object({
-    annual_production: Yup.number().required("Annual Production is required"),
-    material_yield: Yup.number().required("Material Yield is required"),
+    annual_production: Yup.number().required(
+        "Annual Market Production is required"
+    ),
     energy_used: Yup.number("Energy used must be a number.")
         .required("Energy used is required")
         .min(1),
@@ -56,8 +57,10 @@ export const subcontractorSchema = Yup.object({
                     "Direct Emissions is required",
                     function (value) {
                         const { name, indirect_emissions } = this.parent;
-                        return value || name || indirect_emissions
-                            ? !!value
+                        const isValueProvided =
+                            value !== null && value !== undefined;
+                        return name || indirect_emissions !== null
+                            ? isValueProvided
                             : true;
                     }
                 ),
@@ -70,8 +73,10 @@ export const subcontractorSchema = Yup.object({
                     "Indirect Emissions is required",
                     function (value) {
                         const { name, direct_emissions } = this.parent;
-                        return value || name || direct_emissions
-                            ? !!value
+                        const isValueProvided =
+                            value !== null && value !== undefined;
+                        return name || direct_emissions !== null
+                            ? isValueProvided
                             : true;
                     }
                 ),

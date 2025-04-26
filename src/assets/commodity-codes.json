@@ -4,106 +4,34 @@
             "code": "2601 12 00",
             "description": "Agglomerated iron ores and concentrates"
         },
-        { "code": "7201", "description": "Pig iron and spiegeleisen" },
+        { "code": "7202 2", "description": "Ferro-silicon" },
+        { "code": "7202 30 00", "description": "Ferro-silico-manganese" },
+        { "code": "7202 50 00", "description": "Ferro-silico-chromium" },
+        { "code": "7202 70 00", "description": "Ferro-molybdenum" },
         {
-            "code": "7203",
-            "description": "Ferrous products from direct reduction of iron ore"
-        },
-        { "code": "7205", "description": "Granules and powders of pig iron" },
-        {
-            "code": "7206",
-            "description": "Iron and non-alloy steel in ingots or other primary forms"
+            "code": "7202 80 00",
+            "description": "Ferro-tungsten and ferro-silico-tungsten"
         },
         {
-            "code": "7207",
-            "description": "Semi-finished products of iron or non-alloy steel"
+            "code": "7202 91 00",
+            "description": "Ferro-titanium and ferro-silico-titanium"
         },
+        { "code": "7202 92 00", "description": "Ferro-vanadium" },
+        { "code": "7202 93 00", "description": "Ferro-niobium" },
+        { "code": "7202 99 10", "description": "Ferro-phosphorus" },
+        { "code": "7202 99 30", "description": "Ferro-silico-magnesium" },
+        { "code": "7202 99 80", "description": "Other" },
         {
-            "code": "7208",
-            "description": "Flat-rolled products of iron or non-alloy steel, hot-rolled"
+            "code": "7204",
+            "description": "Ferrous waste and scrap; remelting scrap ingots and steel"
         },
-        {
-            "code": "7209",
-            "description": "Flat-rolled products of iron or non-alloy steel, cold-rolled"
-        },
-        {
-            "code": "7210",
-            "description": "Flat-rolled products of iron or non-alloy steel, clad, plated or coated"
-        },
-        {
-            "code": "7211",
-            "description": "Flat-rolled products of iron or non-alloy steel, width < 600mm"
-        },
-        {
-            "code": "7212",
-            "description": "Flat-rolled products of iron or non-alloy steel, clad, plated or coated, width < 600mm"
-        },
-        {
-            "code": "7213",
-            "description": "Bars and rods, hot-rolled, of iron or non-alloy steel"
-        },
-        {
-            "code": "7214",
-            "description": "Other bars and rods of iron or non-alloy steel"
-        },
-        {
-            "code": "7215",
-            "description": "Other bars and rods of iron or non-alloy steel"
-        },
-        {
-            "code": "7216",
-            "description": "Angles, shapes and sections of iron or non-alloy steel"
-        },
-        { "code": "7217", "description": "Wire of iron or non-alloy steel" },
-        {
-            "code": "7218",
-            "description": "Stainless steel in ingots or other primary forms"
-        },
-        {
-            "code": "7219",
-            "description": "Flat-rolled products of stainless steel, width ≥ 600mm"
-        },
-        {
-            "code": "7220",
-            "description": "Flat-rolled products of stainless steel, width < 600mm"
-        },
-        {
-            "code": "7221",
-            "description": "Bars and rods, hot-rolled, of stainless steel"
-        },
-        {
-            "code": "7222",
-            "description": "Other bars and rods of stainless steel"
-        },
-        { "code": "7223", "description": "Wire of stainless steel" },
-        {
-            "code": "7224",
-            "description": "Other alloy steel in ingots or other primary forms"
-        },
-        {
-            "code": "7225",
-            "description": "Flat-rolled products of other alloy steel, width ≥ 600mm"
-        },
-        {
-            "code": "7226",
-            "description": "Flat-rolled products of other alloy steel, width < 600mm"
-        },
-        {
-            "code": "7227",
-            "description": "Bars and rods, hot-rolled, of other alloy steel"
-        },
-        {
-            "code": "7228",
-            "description": "Other bars and rods of other alloy steel"
-        },
-        { "code": "7229", "description": "Wire of other alloy steel" },
         { "code": "7301", "description": "Sheet piling of iron or steel" },
         {
             "code": "7302",
             "description": "Railway or tramway track construction material of iron or steel"
         },
         {
-            "code": "7303",
+            "code": "7303 00",
             "description": "Tubes, pipes and hollow profiles, of cast iron"
         },
         {
@@ -119,9 +47,12 @@
             "description": "Other tubes, pipes and hollow profiles"
         },
         { "code": "7307", "description": "Tube or pipe fittings" },
-        { "code": "7308", "description": "Structures and parts of structures" },
         {
-            "code": "7309",
+            "code": "7308",
+            "description": "Structures and parts of structures"
+        },
+        {
+            "code": "7309 00",
             "description": "Reservoirs, tanks, vats and similar containers exceeding 300 l"
         },
         {
@@ -129,12 +60,12 @@
             "description": "Tanks, casks, drums, cans, boxes and similar containers not exceeding 300 l"
         },
         {
-            "code": "7311",
+            "code": "7311 00",
             "description": "Containers for compressed or liquefied gas"
         },
         {
             "code": "7318",
-            "description": "Screws, bolts, nuts, coach screws, screw hooks, rivets, cotters, cotter pins, washers"
+            "description": "Screws, bolts, nuts, coach screws, screw hooks, rivets, cotters, cotter pins, washers and similar articles"
         },
         { "code": "7326", "description": "Other articles of iron or steel" }
     ],
@@ -145,37 +76,46 @@
         { "code": "7605", "description": "Aluminium wire" },
         {
             "code": "7606",
-            "description": "Aluminium plates, sheets and strip, thickness > 0.2 mm"
+            "description": "Aluminium plates, sheets and strip, of a thickness exceeding 0.2 mm"
         },
-        { "code": "7607", "description": "Aluminium foil, thickness ≤ 0.2 mm" },
+        {
+            "code": "7607",
+            "description": "Aluminium foil (whether or not printed or backed with paper, paperboard, plastics or similar backing materials) of a thickness (excluding any backing) not exceeding 0.2 mm"
+        },
         { "code": "7608", "description": "Aluminium tubes and pipes" },
-        { "code": "7609", "description": "Aluminium tube or pipe fittings" },
+        {
+            "code": "7609 00 00",
+            "description": "Aluminium tube or pipe fittings (for example, couplings, elbows, sleeves)"
+        },
         {
             "code": "7610",
             "description": "Aluminium structures and parts of structures"
         },
         {
-            "code": "7611",
-            "description": "Aluminium reservoirs, tanks, vats, capacity > 300 litres"
+            "code": "7611 00 00",
+            "description": "Aluminium reservoirs, tanks, vats and similar containers, capacity exceeding 300 litres"
         },
         {
             "code": "7612",
-            "description": "Aluminium casks, drums, cans, boxes, capacity ≤ 300 litres"
+            "description": "Aluminium casks, drums, cans, boxes and similar containers, capacity not exceeding 300 litres"
         },
         {
-            "code": "7613",
+            "code": "7613 00 00",
             "description": "Aluminium containers for compressed or liquefied gas"
         },
         {
             "code": "7614",
-            "description": "Stranded wire, cables, plaited bands of aluminium"
+            "description": "Stranded wire, cables, plaited bands and the like, of aluminium, not electrically insulated"
         },
         { "code": "7616", "description": "Other articles of aluminium" }
     ],
     "cement": [
         { "code": "2507 00 80", "description": "Other kaolinic clays" },
         { "code": "2523 10 00", "description": "Cement clinkers" },
-        { "code": "2523 21 00", "description": "White Portland cement" },
+        {
+            "code": "2523 21 00",
+            "description": "White Portland cement, whether or not artificially coloured"
+        },
         { "code": "2523 29 00", "description": "Other Portland cement" },
         { "code": "2523 30 00", "description": "Aluminous cement" },
         { "code": "2523 90 00", "description": "Other hydraulic cements" }
@@ -196,7 +136,7 @@
         },
         {
             "code": "3105",
-            "description": "Mineral or chemical fertilisers (2-3 elements, except 3105 60 00)"
+            "description": "Mineral or chemical fertilisers containing two or three of the fertilising elements nitrogen, phosphorus and potassium (except 3105 60 00)"
         }
     ],
     "hydrogen": [{ "code": "2804 10 00", "description": "Hydrogen" }]
